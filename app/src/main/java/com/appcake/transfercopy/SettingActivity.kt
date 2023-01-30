@@ -15,7 +15,10 @@ class SettingActivity : AppCompatActivity() {
 
         binding.apply {
             homeImg.setOnClickListener {
-                startActivity(Intent(this@SettingActivity,MainActivity::class.java))
+                val intent=Intent(this@SettingActivity,MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
         }
     }

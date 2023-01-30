@@ -15,10 +15,17 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
             settingsImg.setOnClickListener {
-                startActivity(Intent(this@MainActivity,SettingActivity::class.java))
+                val intent =Intent(this@MainActivity,SettingActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+
             }
             shareButton.setOnClickListener {
-                startActivity(Intent(this@MainActivity,FileTransferActivity::class.java))
+                val intent =Intent(this@MainActivity,FileTransferActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
 
         }
