@@ -13,9 +13,14 @@ class MainActivity : AppCompatActivity() {
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.settingsImg.setOnClickListener {
-            val intent = Intent(this, SettingActivity::class.java)
-            startActivity(intent)
+        binding.apply {
+            settingsImg.setOnClickListener {
+                startActivity(Intent(this@MainActivity,SettingActivity::class.java))
+            }
+            shareButton.setOnClickListener {
+                startActivity(Intent(this@MainActivity,FileTransferActivity::class.java))
+            }
+
         }
     }
 }
