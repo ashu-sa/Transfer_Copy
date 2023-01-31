@@ -12,6 +12,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.appcake.transfercopy.databinding.ActivityFileTransferBinding
 import com.appcake.transfercopy.databinding.ActivityReceiveBinding
+import com.budiyev.android.codescanner.AutoFocusMode
+import com.budiyev.android.codescanner.CodeScanner
+import com.budiyev.android.codescanner.DecodeCallback
+import com.budiyev.android.codescanner.ErrorCallback
+import com.budiyev.android.codescanner.ScanMode
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -22,15 +27,13 @@ import com.karumi.dexter.listener.single.PermissionListener
 class ReceiveActivity : AppCompatActivity() {
     private lateinit var binding: ActivityReceiveBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReceiveBinding.inflate(layoutInflater)
         setContentView(binding.root)
         validatePermission()
-
-
-
-
+        openQRscanner()
         binding.apply {
             backImg.setOnClickListener {
                 val intent = Intent(this@ReceiveActivity, FileTransferActivity::class.java)
@@ -46,8 +49,9 @@ class ReceiveActivity : AppCompatActivity() {
             .withPermission(android.Manifest.permission.CAMERA)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                    val cameraIntent = Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE)
-
+                    binding.receiveQrText.visibility = View.INVISIBLE
+                    binding.cameraImg.visibility = View.INVISIBLE
+                    binding.scannerViewLayout.visibility = View.VISIBLE
                 }
 
                 override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
@@ -64,5 +68,33 @@ class ReceiveActivity : AppCompatActivity() {
                 }
 
             }).check()
+    }
+    private fun openQRscanner(){
+         val codeScanner = CodeScanner(this,binding.scannerView)
+
+        // Parameters (default values)
+        codeScanner.camera = CodeScanner.CAMERA_BACK
+        codeScanner.formats = CodeScanner.ALL_FORMATS
+
+        // ex. listOf(BarcodeFormat.QR_CODE)
+        codeScanner.autoFocusMode = AutoFocusMode.SAFE
+        codeScanner.scanMode = ScanMode.SINGLE
+        codeScanner.isAutoFocusEnabled = true
+        codeScanner.isFlashEnabled = false
+
+
+        // Callbacks
+        codeScanner.decodeCallback = DecodeCallback {
+            runOnUiThread {
+                Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
+            }
+        }
+        codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
+            runOnUiThread {
+                Toast.makeText(this, "Camera initialization error: ${it.message}",
+                    Toast.LENGTH_LONG).show()
+            }
+        }
+            codeScanner.startPreview()
     }
 }

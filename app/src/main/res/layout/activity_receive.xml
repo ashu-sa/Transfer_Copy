@@ -40,6 +40,18 @@
 
 
     </LinearLayout>
+    <FrameLayout
+        android:id="@+id/scanner_view_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <com.budiyev.android.codescanner.CodeScannerView
+            android:id="@+id/scanner_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:autoFocusButtonVisible="false"/>
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/camera_img"
@@ -53,6 +65,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/receive_qr_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
