@@ -50,4 +50,5 @@ dependencies {
     implementation 'com.intuit.ssp:ssp-android:1.1.0'
     implementation 'com.karumi:dexter:6.2.3'
     implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
+    implementation 'com.github.androidmads:QRGenerator:1.0.1'
 }

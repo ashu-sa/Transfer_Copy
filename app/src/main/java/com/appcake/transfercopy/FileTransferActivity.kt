@@ -3,13 +3,8 @@ package com.appcake.transfercopy
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import com.appcake.transfercopy.Fragments.QRcodeFragment
 import com.appcake.transfercopy.databinding.ActivityFileTransferBinding
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
-import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 
 class FileTransferActivity : AppCompatActivity() {
@@ -33,6 +28,11 @@ class FileTransferActivity : AppCompatActivity() {
                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                startActivity(intent)
            }
+
+            sendFileCard.setOnClickListener {
+                val fragment = QRcodeFragment()
+                   supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
+            }
         }
     }
 }
