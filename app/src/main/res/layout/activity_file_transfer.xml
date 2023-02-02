@@ -62,7 +62,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/sendFile_header_text"
+                android:id="@+id/sendFIle_header_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_20sdp"
@@ -83,7 +83,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sendFile_header_text" />
+                app:layout_constraintTop_toBottomOf="@+id/sendFIle_header_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
