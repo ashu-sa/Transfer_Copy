@@ -30,7 +30,7 @@ class FileTransferActivity : AppCompatActivity() {
 
             sendFileCard.setOnClickListener {
                 val fragment = QRcodeFragment()
-                   supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
             }
         }
     }
