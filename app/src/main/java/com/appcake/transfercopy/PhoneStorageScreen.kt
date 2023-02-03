@@ -19,12 +19,23 @@ class PhoneStorageScreen : AppCompatActivity() {
         val iBlockSize = iStat.blockSizeLong
         val iAvailableBlocks = iStat.availableBlocksLong
         val iTotalBlocks = iStat.blockCountLong
-        val iAvailableSpace = formatSize(iAvailableBlocks * iBlockSize)
-        val iTotalSpace = formatSize(iTotalBlocks * iBlockSize)
+        var iAvailableSpace = formatSize(iAvailableBlocks * iBlockSize)
+        var iTotalSpace = formatSize(iTotalBlocks * iBlockSize)
         binding.apply {
             totalStorageText.text = "$iTotalSpace"
             availableStorageText.text = "$iAvailableSpace"
         }
+        //Progress bar
+        iAvailableSpace = iAvailableSpace?.replace(" GB","")
+        iTotalSpace = iTotalSpace?.replace(" GB","")
+
+        val totalSpaceInt = iTotalSpace!!.toInt()
+        val availableSpaceInt= iAvailableSpace!!.toInt()
+        val remainingSpaceInt = totalSpaceInt - availableSpaceInt
+
+        setProgressBar(totalSpaceInt,remainingSpaceInt)
+
+
 
 
     }
@@ -53,6 +64,14 @@ class PhoneStorageScreen : AppCompatActivity() {
         }
         if (suffix != null) resultBuffer.append(suffix)
         return resultBuffer.toString()
+    }
+    private fun setProgressBar(max:Int,progress:Int){
+        val max = max
+        val progress = progress
+        binding.apply {
+            progressBar.progress = progress
+            progressBar.max = max
+        }
     }
 
 
