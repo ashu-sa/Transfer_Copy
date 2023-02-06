@@ -37,6 +37,7 @@
             android:text="Contacts"
             android:textColor="@color/white"
             android:textSize="@dimen/_14ssp" />
+
         <TextView
             android:id="@+id/select_files_text"
             android:layout_width="wrap_content"
@@ -45,13 +46,13 @@
             android:fontFamily="@font/notosans_medium"
             android:gravity="center"
             android:text="Select"
-            android:visibility="gone"
             android:textColor="@color/button_color"
-            android:textSize="@dimen/_14ssp" />
-
+            android:textSize="@dimen/_14ssp"
+            android:visibility="gone" />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/contactfiles_linearLayout2"
         android:layout_width="match_parent"
@@ -59,8 +60,8 @@
         android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginEnd="@dimen/_20sdp"
-        android:visibility="gone"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -70,12 +71,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_weight="2"
             android:fontFamily="@font/notosans_medium"
             android:gravity="start"
             android:text="Select all"
-            android:layout_weight="2"
             android:textColor="@color/button_color"
             android:textSize="@dimen/_14ssp" />
+
         <TextView
             android:id="@+id/cancel_files_text"
             android:layout_width="wrap_content"
@@ -88,8 +90,18 @@
             android:textSize="@dimen/_14ssp" />
 
 
-
-
     </LinearLayout>
 
+    <androidx.appcompat.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_36sdp"
+        android:layout_margin="@dimen/_14sdp"
+        android:background="#4C144A"
+        app:searchIcon="@drawable/search3"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contactfiles_linearLayout"
+        app:queryHint="Search" />
 </androidx.constraintlayout.widget.ConstraintLayout>
