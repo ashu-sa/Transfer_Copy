@@ -54,7 +54,7 @@
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/photofiles_linearLayout2"
+        android:id="@+id/docfiles_linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_36sdp"
         android:layout_marginStart="@dimen/_20sdp"
@@ -92,5 +92,18 @@
 
 
     </LinearLayout>
+    <androidx.appcompat.widget.SearchView
+        android:layout_width="match_parent"
+        app:theme="@style/AppSearchView"
+        android:layout_height="@dimen/_36sdp"
+        android:layout_margin="@dimen/_14sdp"
+        android:background="#4C144A"
+        app:searchIcon="@drawable/search3"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/docfiles_linearLayout"
+        app:queryHint="Search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.appcake.transfercopy
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -47,6 +48,21 @@ class PhoneStorageScreen : AppCompatActivity() {
         setProgressBar(totalSpaceInt,remainingSpaceInt)
 
         binding.videoSpaceText.text = formatSize(videoSpace())
+
+        binding.apply {
+            contactsLinearLayout.setOnClickListener {
+                val intent = Intent(this@PhoneStorageScreen,ContactActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            docsLinearLayout.setOnClickListener {
+                val intent = Intent(this@PhoneStorageScreen,DocsActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+        }
 
 
 
