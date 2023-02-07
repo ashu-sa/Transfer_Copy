@@ -31,4 +31,9 @@
         <item name="android:editTextColor">#919191</item>
         <item name="android:textColorHint">#919191</item>
     </style>
+    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="fontFamily">@font/notosans_medium</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+    </style>
 </resources>
