@@ -28,5 +28,6 @@ class VideoAdapter(var list:ArrayList<String>): RecyclerView.Adapter<VideoAdapte
 
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         var currentPosition = list[position]
+        Glide.with(holder.itemView.context).load(list.get(position)).into(holder.videoView)
     }
 }
