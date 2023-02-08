@@ -95,9 +95,9 @@
     <androidx.appcompat.widget.SearchView
         android:layout_width="match_parent"
         app:theme="@style/AppSearchView"
-        android:layout_height="@dimen/_36sdp"
+        android:layout_height="@dimen/_32sdp"
         android:layout_margin="@dimen/_14sdp"
-        android:background="#4C144A"
+        android:background="@drawable/search_bg"
         app:searchIcon="@drawable/search3"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
