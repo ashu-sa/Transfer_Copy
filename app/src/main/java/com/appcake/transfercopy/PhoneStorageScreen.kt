@@ -1,12 +1,19 @@
 package com.appcake.transfercopy
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.net.wifi.p2p.WifiP2pDeviceList
+import android.net.wifi.p2p.WifiP2pInfo
+import android.net.wifi.p2p.WifiP2pManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import com.appcake.transfercopy.databinding.ActivityPhoneStorageScreenBinding
 import com.appcake.transfercopy.databinding.FragmentQRcodeBinding
 import com.karumi.dexter.Dexter
@@ -16,9 +23,11 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import java.io.File
+import java.util.*
 
 class PhoneStorageScreen : AppCompatActivity() {
     private lateinit var binding: ActivityPhoneStorageScreenBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityPhoneStorageScreenBinding.inflate(layoutInflater)
