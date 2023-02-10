@@ -1,17 +1,13 @@
 package com.appcake.transfercopy
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.wifi.WifiManager
-import android.net.wifi.p2p.WifiP2pDevice
-import android.net.wifi.p2p.WifiP2pManager
+import android.net.wifi.p2p.*
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
-import com.appcake.transfercopy.Fragments.QRcodeFragment
+import androidx.annotation.RequiresApi
 import com.appcake.transfercopy.databinding.ActivityFileTransferBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -22,33 +18,18 @@ import com.karumi.dexter.listener.single.PermissionListener
 
 class FileTransferActivity : AppCompatActivity() {
     private  lateinit var binding: ActivityFileTransferBinding
-    val manager: WifiP2pManager? by lazy(LazyThreadSafetyMode.NONE) {
-        getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager?
-    }
-
-    var channel: WifiP2pManager.Channel? = null
-    var receiver: BroadcastReceiver? = null
+    private lateinit var manager: WifiManager
 
 
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityFileTransferBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        channel = manager?.initialize(this, mainLooper, null)
-        channel?.also { channel ->
-            receiver =
-                manager?.let { com.appcake.transfercopy.WifiP2P.BroadcastReceiver(it,channel,this) }
-        }
-        val intentFilter = IntentFilter().apply {
-            addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
-            addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)
-            addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
-            addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
-        }
-        this.registerReceiver(receiver,intentFilter)
 
-
-
+        manager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
 
 
         binding.apply {
@@ -67,18 +48,9 @@ class FileTransferActivity : AppCompatActivity() {
            }
 
             sendFileCard.setOnClickListener {
-                validatePermission()
-                manager?.discoverPeers(channel, object : WifiP2pManager.ActionListener {
 
-                    override fun onSuccess() {
-                        val fragment = QRcodeFragment()
-                        supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
-                    }
-
-                    override fun onFailure(reasonCode: Int) {
-                        Toast.makeText(this@FileTransferActivity, "Connection Failed", Toast.LENGTH_SHORT).show()
-                    }
-                })
+//                        val fragment = QRcodeFragment()
+//                        supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
 
             }
         }
@@ -105,16 +77,6 @@ class FileTransferActivity : AppCompatActivity() {
                 }
 
             }).check()
-    }
-    override fun onStop() {
-        super.onStop()
-        manager?.cancelConnect(channel, null)
-        manager?.removeGroup(channel, null)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        this.unregisterReceiver(receiver)
     }
 
 }

@@ -10,5 +10,7 @@
     <color name="button_color">#E98919</color>
     <color name="secondary_text">#9B9B9B</color>
     <color name="settings_text">#C99DEA</color>
+    <color name="transparent">#00000000</color>
+    <color name="calendar_text">#AF81CC</color>
 
 </resources>
