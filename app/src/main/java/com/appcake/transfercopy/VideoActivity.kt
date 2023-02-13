@@ -31,7 +31,7 @@ class VideoActivity : AppCompatActivity() {
         }
 
     }
-    @SuppressLint("Range")
+    @SuppressLint("Range", "SuspiciousIndentation")
     private fun getVideos():ArrayList<Video>{
         var videoList: ArrayList<Video> = ArrayList()
         val columns = arrayOf(

@@ -3,13 +3,14 @@ package com.appcake.transfercopy.Adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appcake.transfercopy.R
+import com.appcake.transfercopy.data.Docs
 import com.bumptech.glide.Glide
+import java.io.File
 
-class DocAdapter(val list:ArrayList<String>):RecyclerView.Adapter<DocAdapter.DocViewHolder>() {
+class DocAdapter(val list: ArrayList<Docs>):RecyclerView.Adapter<DocAdapter.DocViewHolder>() {
     class DocViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var docText = itemView.findViewById<TextView>(R.id.doc_text)
     }
@@ -25,5 +26,6 @@ class DocAdapter(val list:ArrayList<String>):RecyclerView.Adapter<DocAdapter.Doc
 
     override fun onBindViewHolder(holder: DocViewHolder, position: Int) {
         var currentPosition = list[position]
+        holder.docText.text = currentPosition.title
     }
 }
