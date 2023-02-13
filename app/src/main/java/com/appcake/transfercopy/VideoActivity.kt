@@ -1,43 +1,66 @@
 package com.appcake.transfercopy
 
+import android.annotation.SuppressLint
 import android.database.Cursor
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.recyclerview.widget.GridLayoutManager
 import com.appcake.transfercopy.Adapter.VideoAdapter
+import com.appcake.transfercopy.data.Video
 import com.appcake.transfercopy.databinding.ActivityVideoBinding
+import java.io.File
 
 class VideoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVideoBinding
+    companion object{
+        lateinit var videoList:ArrayList<Video>
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val adapter = VideoAdapter(getVideos())
+        videoList = getVideos()
+
+        val adapter = VideoAdapter(videoList)
         binding.apply {
-            videoRcView.layoutManager = GridLayoutManager(this@VideoActivity,5)
+            videoRcView.layoutManager = GridLayoutManager(this@VideoActivity,4)
             videoRcView.adapter = adapter
         }
 
     }
-    private fun getVideos():ArrayList<String>{
-        var imageList: ArrayList<String> = ArrayList()
+    @SuppressLint("Range")
+    private fun getVideos():ArrayList<Video>{
+        var videoList: ArrayList<Video> = ArrayList()
         val columns = arrayOf(
             MediaStore.Video.Media.DATA,
             MediaStore.Video.Media.DURATION,
-            MediaStore.Video.Media._ID
+            MediaStore.Video.Media._ID,
+            MediaStore.Video.Media.DATE_ADDED
         )
         val uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-        val imagecursor: Cursor = this@VideoActivity.contentResolver.query(uri, columns, null, null,"")!!
-        for (i in 0 until imagecursor.count) {
-            imagecursor.moveToPosition(i)
-            val dataColumnIndex =
-                imagecursor.getColumnIndex(MediaStore.Video.Media.DATA)
-            imageList.add(imagecursor.getString(dataColumnIndex))
-        }
-        return imageList
+        val videocursor: Cursor = this@VideoActivity.contentResolver.query(uri, columns, null, null,MediaStore.Video.Media.DATE_ADDED + " DESC")!!
+
+       if (videocursor != null)
+           if (videocursor.moveToNext())
+               do {
+                   val id = videocursor.getString(videocursor.getColumnIndex(MediaStore.Video.Media._ID))
+                   val duration = videocursor.getString(videocursor.getColumnIndex(MediaStore.Video.Media.DURATION)).toLong()
+                   val path = videocursor.getString(videocursor.getColumnIndex(MediaStore.Video.Media.DATA))
+
+                   try {
+                       val file = File(path)
+                       val artUri = Uri.fromFile(file)
+                       val video = Video(id, duration, path, artUri)
+                       if (file.exists()) videoList.add(video)
+
+                   }catch (e:java.lang.Exception){}
+               }while (videocursor.moveToNext())
+               videocursor?.close()
+
+        return videoList
 
     }
 }

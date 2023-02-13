@@ -1,6 +1,7 @@
 package com.appcake.transfercopy.Adapter
 
 import android.net.Uri
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +9,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appcake.transfercopy.R
+import com.appcake.transfercopy.data.Video
 import com.bumptech.glide.Glide
 import java.io.File
 
-class VideoAdapter(var list:ArrayList<String>): RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
+class VideoAdapter(var list:ArrayList<Video>): RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
     class VideoViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val videoView = itemView.findViewById<ImageView>(R.id.video_view)
-        var videoText = itemView.findViewById<TextView>(R.id.duration_text)
+        var videoDuration = itemView.findViewById<TextView>(R.id.duration_text)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
@@ -28,6 +30,8 @@ class VideoAdapter(var list:ArrayList<String>): RecyclerView.Adapter<VideoAdapte
 
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         var currentPosition = list[position]
-        Glide.with(holder.itemView.context).load(list.get(position)).into(holder.videoView)
+        holder.videoDuration.text = DateUtils.formatElapsedTime(currentPosition.duration/1000)
+        Glide.with(holder.itemView.context).asBitmap().load(currentPosition.artUri).into(holder.videoView)
+
     }
 }

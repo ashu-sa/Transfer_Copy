@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.appcake.transfercopy.Fragments.QRcodeFragment
 import com.appcake.transfercopy.databinding.ActivityFileTransferBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -49,8 +50,8 @@ class FileTransferActivity : AppCompatActivity() {
 
             sendFileCard.setOnClickListener {
 
-//                        val fragment = QRcodeFragment()
-//                        supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
+                        val fragment = QRcodeFragment()
+                        supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit()
 
             }
         }

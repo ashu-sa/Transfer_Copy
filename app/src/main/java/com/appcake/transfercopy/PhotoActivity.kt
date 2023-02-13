@@ -16,7 +16,7 @@ class PhotoActivity : AppCompatActivity() {
         setContentView(binding.root)
         val adapter = PhotoAdapter(getPhotos())
         binding.apply {
-            photoRcView.layoutManager =GridLayoutManager(this@PhotoActivity,5)
+            photoRcView.layoutManager =GridLayoutManager(this@PhotoActivity,4)
             photoRcView.adapter = adapter
         }
 
@@ -25,10 +25,12 @@ class PhotoActivity : AppCompatActivity() {
         var imageList: ArrayList<String> = ArrayList()
         val columns = arrayOf(
             MediaStore.Images.Media.DATA,
-            MediaStore.Images.Media._ID
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.DATE_ADDED
+
         )
         val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val imagecursor: Cursor = this@PhotoActivity.contentResolver.query(uri, columns, null, null,"")!!
+        val imagecursor: Cursor = this@PhotoActivity.contentResolver.query(uri, columns, null, null,  MediaStore.Images.Media.DATE_ADDED + " DESC")!!
         for (i in 0 until imagecursor.count) {
             imagecursor.moveToPosition(i)
             val dataColumnIndex =
