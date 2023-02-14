@@ -65,132 +65,144 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calender_linearLayout">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:orientation="horizontal">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="@dimen/_10sdp"-->
+<!--            android:orientation="horizontal">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_weight="2"
-                android:fontFamily="@font/notosans_semibold"
-                android:text="January 2023"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_16ssp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_10sdp"-->
+<!--                android:layout_weight="2"-->
+<!--                android:fontFamily="@font/notosans_semibold"-->
+<!--                android:text="January 2023"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="@dimen/_16ssp" />-->
 
-            <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:src="@drawable/cal_arrow_back" />
+<!--            <ImageView-->
+<!--                android:layout_width="@dimen/_20sdp"-->
+<!--                android:layout_height="@dimen/_20sdp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginStart="@dimen/_10sdp"-->
+<!--                android:src="@drawable/cal_arrow_back" />-->
 
-            <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:src="@drawable/cal_arrow_front" />
+<!--            <ImageView-->
+<!--                android:layout_width="@dimen/_20sdp"-->
+<!--                android:layout_height="@dimen/_20sdp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginStart="@dimen/_10sdp"-->
+<!--                android:layout_marginEnd="@dimen/_20sdp"-->
+<!--                android:src="@drawable/cal_arrow_front" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginStart="@dimen/_10sdp"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:paddingTop="@dimen/_6sdp"-->
+<!--            android:paddingEnd="@dimen/_5sdp"-->
+<!--            android:paddingBottom="@dimen/_6sdp">-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/_6sdp"
-            android:paddingEnd="@dimen/_5sdp"
-            android:paddingBottom="@dimen/_6sdp">
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_5sdp"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:fontFamily="@font/notosans_semibold"-->
+<!--                android:text="MON"-->
+<!--                android:textColor="#CDCDCD"-->
+<!--                android:textSize="@dimen/_12ssp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/notosans_semibold"
-                android:text="MON"
-                android:textColor="#CDCDCD"
-                android:textSize="@dimen/_12ssp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_12sdp"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:fontFamily="@font/notosans_semibold"-->
+<!--                android:text="TUE"-->
+<!--                android:textColor="#CDCDCD"-->
+<!--                android:textSize="@dimen/_12ssp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/notosans_semibold"
-                android:text="TUE"
-                android:textColor="#CDCDCD"
-                android:textSize="@dimen/_12ssp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_12sdp"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:fontFamily="@font/notosans_semibold"-->
+<!--                android:text="WED"-->
+<!--                android:textColor="#CDCDCD"-->
+<!--                android:textSize="@dimen/_12ssp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/notosans_semibold"
-                android:text="WED"
-                android:textColor="#CDCDCD"
-                android:textSize="@dimen/_12ssp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_12sdp"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:fontFamily="@font/notosans_semibold"-->
+<!--                android:text="THU"-->
+<!--                android:textColor="#CDCDCD"-->
+<!--                android:textSize="@dimen/_12ssp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/notosans_semibold"
-                android:text="THU"
-                android:textColor="#CDCDCD"
-                android:textSize="@dimen/_12ssp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_12sdp"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:fontFamily="@font/notosans_semibold"-->
+<!--                android:text="FRI"-->
+<!--                android:textColor="#CDCDCD"-->
+<!--                android:textSize="@dimen/_12ssp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/notosans_semibold"
-                android:text="FRI"
-                android:textColor="#CDCDCD"
-                android:textSize="@dimen/_12ssp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_12sdp"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:fontFamily="@font/notosans_semibold"-->
+<!--                android:text="SAT"-->
+<!--                android:textColor="#CDCDCD"-->
+<!--                android:textSize="@dimen/_12ssp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/notosans_semibold"
-                android:text="SAT"
-                android:textColor="#CDCDCD"
-                android:textSize="@dimen/_12ssp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_12sdp"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:fontFamily="@font/notosans_semibold"-->
+<!--                android:text="SUN"-->
+<!--                android:textColor="#CDCDCD"-->
+<!--                android:textSize="@dimen/_12ssp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/notosans_semibold"
-                android:text="SUN"
-                android:textColor="#CDCDCD"
-                android:textSize="@dimen/_12ssp" />
+<!--        </LinearLayout>-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
+<!--            <include-->
+<!--                android:id="@+id/titlesContainer"-->
+<!--                layout="@layout/calendar_day_titles_container" />-->
 
-        </LinearLayout>
+<!--            <com.kizitonwose.calendar.view.CalendarView-->
+<!--                android:id="@+id/date_rc"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:cv_dayViewResource="@layout/date_text_layout"/>-->
 
-        <com.kizitonwose.calendar.view.CalendarView
-            android:id="@+id/date_rc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:layout_marginEnd="@dimen/_4sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
-            app:cv_dayViewResource="@layout/date_text_layout"/>
+<!--        </LinearLayout>-->
+
+        <CalendarView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
 
     </LinearLayout>
     <!--   Events-->
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/event_rc_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_120sdp"
         android:layout_margin="@dimen/_20sdp"

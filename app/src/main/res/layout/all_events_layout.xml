@@ -24,6 +24,7 @@
 
 
             <TextView
+                android:id="@+id/time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/notosans_semibold"
@@ -32,7 +33,7 @@
                 android:textSize="@dimen/_14ssp" />
 
             <TextView
-                android:id="@+id/video_space_text"
+                android:id="@+id/event_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_14sdp"
