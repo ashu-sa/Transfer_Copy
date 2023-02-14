@@ -1,6 +1,5 @@
 package com.appcake.transfercopy.Adapter
 
-import android.net.Uri
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appcake.transfercopy.R
 import com.appcake.transfercopy.data.Video
 import com.bumptech.glide.Glide
-import java.io.File
 
 class VideoAdapter(var list:ArrayList<Video>): RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
     class VideoViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

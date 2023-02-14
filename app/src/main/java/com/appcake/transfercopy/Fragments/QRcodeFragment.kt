@@ -1,25 +1,37 @@
 package com.appcake.transfercopy.Fragments
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Point
+import android.net.wifi.WifiManager
+import android.net.wifi.WifiManager.LocalOnlyHotspotCallback
+import android.net.wifi.WifiManager.LocalOnlyHotspotReservation
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.appcake.transfercopy.R
+import android.view.WindowManager
+import androidmads.library.qrgenearator.QRGContents
+import androidmads.library.qrgenearator.QRGEncoder
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
+import com.appcake.transfercopy.WifiP2P.JsonHelper
 import com.appcake.transfercopy.databinding.FragmentQRcodeBinding
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
-import com.google.zxing.qrcode.encoder.QRCode
-import com.journeyapps.barcodescanner.BarcodeEncoder
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.*
 
 class QRcodeFragment : Fragment() {
       private lateinit var binding: FragmentQRcodeBinding
+      private lateinit var manager: WifiManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,7 +45,34 @@ class QRcodeFragment : Fragment() {
         binding = FragmentQRcodeBinding.inflate(inflater, container, false)
         return binding.root
 
-           binding.qrCode.setImageBitmap(generateQrCode("Suceess"))
+       manager = requireContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        fun oreoAndAboveDevicesSetupHotspot() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) manager.startLocalOnlyHotspot(
+                object : LocalOnlyHotspotCallback() {
+                    override fun onStarted(reservation: LocalOnlyHotspotReservation) {
+                        val reservation = reservation
+                        val retry = 0
+                        val jsonObject = JSONObject()
+
+                        try {
+                            jsonObject.put(JsonHelper.SSID, reservation.wifiConfiguration!!.SSID)
+                            jsonObject.put(
+                                JsonHelper.Password,
+                                reservation.wifiConfiguration!!.preSharedKey
+                            )
+
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    }
+
+                },
+                null
+            )
+        }
+
+
 
 
      }
@@ -56,5 +95,6 @@ class QRcodeFragment : Fragment() {
             }
             return bmp
         }
+
 
     }

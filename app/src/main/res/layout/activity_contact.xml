@@ -93,6 +93,7 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.SearchView
+        android:id="@+id/contact_searchview"
         android:layout_width="match_parent"
         app:theme="@style/AppSearchView"
         android:layout_height="@dimen/_32sdp"
@@ -105,4 +106,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contactfiles_linearLayout"
         app:queryHint="Search" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contact_rc_view"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/_8sdp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contact_searchview" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

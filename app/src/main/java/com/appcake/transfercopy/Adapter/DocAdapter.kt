@@ -28,4 +28,5 @@ class DocAdapter(val list: ArrayList<Docs>):RecyclerView.Adapter<DocAdapter.DocV
         var currentPosition = list[position]
         holder.docText.text = currentPosition.title
     }
+
 }

@@ -7,8 +7,7 @@
         android:id="@+id/contacts_linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -16,12 +15,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/contact_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_semibold"
+                android:fontFamily="@font/notosans_regular"
                 android:text="Ashutosh"
-                android:layout_margin="@dimen/_8sdp"
-                android:textColor="@color/black"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom ="@dimen/_8sdp"
+                android:textColor="@color/white"
                 android:textSize="@dimen/_14ssp" />
 
         <View

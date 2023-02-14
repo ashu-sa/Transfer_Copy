@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.recyclerview.widget.GridLayoutManager
+import com.appcake.transfercopy.Adapter.ContactAdapter
 import com.appcake.transfercopy.Adapter.VideoAdapter
 import com.appcake.transfercopy.data.Video
 import com.appcake.transfercopy.databinding.ActivityVideoBinding

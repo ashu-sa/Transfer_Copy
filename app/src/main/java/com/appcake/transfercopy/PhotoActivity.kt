@@ -16,7 +16,8 @@ class PhotoActivity : AppCompatActivity() {
         setContentView(binding.root)
         val adapter = PhotoAdapter(getPhotos())
         binding.apply {
-            photoRcView.layoutManager =GridLayoutManager(this@PhotoActivity,4)
+            photoRcView.layoutManager =GridLayoutManager(this@PhotoActivity,4
+            )
             photoRcView.adapter = adapter
         }
 

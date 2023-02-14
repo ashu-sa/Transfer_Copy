@@ -3,6 +3,7 @@ package com.appcake.transfercopy
 import android.annotation.SuppressLint
 import android.database.Cursor
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +27,7 @@ class DocsActivity : AppCompatActivity() {
         val adapter = DocAdapter(docList)
 
         binding.apply {
-            docRcView.layoutManager = GridLayoutManager(this@DocsActivity,4)
+            docRcView.layoutManager = GridLayoutManager(this@DocsActivity,3)
             docRcView.adapter = adapter
         }
 
@@ -37,27 +38,26 @@ class DocsActivity : AppCompatActivity() {
         var docList: ArrayList<Docs> = ArrayList()
         val columns = arrayOf(
             MediaStore.Files.FileColumns._ID,
-            MediaStore.Files.FileColumns.TITLE,
+            MediaStore.Files.FileColumns.DISPLAY_NAME,
             MediaStore.Files.FileColumns.DATA,
+            MediaStore.Files.FileColumns.MIME_TYPE,
             MediaStore.Files.FileColumns.DATE_ADDED
 
         )
-        val selection = MediaStore.Files.FileColumns.MIME_TYPE + " = ?"
-
+        val selection = "_data LIKE '%.pdf'"
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")
-        val selectionArgs = arrayOf(mimeType)
+        val selectionArgs = arrayOf("application/pdf", "application/msword")
         val uri = MediaStore.Files.getContentUri("external")
-        val doccursor: Cursor = this@DocsActivity.contentResolver.query(uri, columns,selection,selectionArgs,
+        val doccursor: Cursor = this@DocsActivity.contentResolver.query(uri, columns,null ,null,
             MediaStore.Files.FileColumns.DATE_ADDED + " DESC")!!
 
         if (doccursor != null)
             if (doccursor.moveToNext())
                 do {
                     val id = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns._ID))
-                    val title = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns.TITLE))
+                    val title = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME))
                     val path = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns.DATA))
-
-                    try {
+                        try {
                         val file = File(path)
                         val docs = Docs(id, title)
                         if (file.exists()) docList.add(docs)
@@ -69,4 +69,5 @@ class DocsActivity : AppCompatActivity() {
         return docList
 
     }
+
 }

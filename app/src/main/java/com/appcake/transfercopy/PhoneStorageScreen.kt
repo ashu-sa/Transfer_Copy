@@ -17,10 +17,12 @@ import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instanc
 import com.appcake.transfercopy.databinding.ActivityPhoneStorageScreenBinding
 import com.appcake.transfercopy.databinding.FragmentQRcodeBinding
 import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
 import java.io.File
 import java.util.*
@@ -57,6 +59,9 @@ class PhoneStorageScreen : AppCompatActivity() {
         setProgressBar(totalSpaceInt,remainingSpaceInt)
 
         binding.videoSpaceText.text = formatSize(videoSpace())
+        val photoFolder = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Documents")
+        val photoFolderSize = getFolderSize(photoFolder)
+        binding.photoSpaceText.text = formatSize(photoFolderSize)
 
         binding.apply {
             contactsLinearLayout.setOnClickListener {
@@ -131,23 +136,18 @@ class PhoneStorageScreen : AppCompatActivity() {
     }
     private fun validatePermission() {
         Dexter.withContext(this)
-            .withPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            .withListener(object : PermissionListener {
-                override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+            .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.READ_CONTACTS)
+            .withListener(object : MultiplePermissionsListener {
 
-                }
-
-                override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                    Toast.makeText(this@PhoneStorageScreen, "Permission 2", Toast.LENGTH_SHORT).show()
+                override fun onPermissionsChecked(p0: MultiplePermissionsReport?) {
 
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    p0: PermissionRequest?,
+                    p0: MutableList<PermissionRequest>?,
                     p1: PermissionToken?
                 ) {
                     Toast.makeText(this@PhoneStorageScreen, "Permission 3", Toast.LENGTH_SHORT).show()
-
                 }
 
             }).check()
@@ -165,6 +165,14 @@ class PhoneStorageScreen : AppCompatActivity() {
         }
        return totalSize
     }
+    fun getFolderSize(dir: File): Long {
+        var size: Long = 0
+        dir.listFiles()?.forEach {
+            size += if (it.isDirectory) getFolderSize(it) else it.length()
+        }
+        return size
+    }
+
 
 
 }

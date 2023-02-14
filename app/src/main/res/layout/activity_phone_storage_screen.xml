@@ -297,6 +297,7 @@
                             android:fontFamily="@font/notosans_semibold"
                             android:layout_marginStart="@dimen/_15sdp"/>
                         <TextView
+                            android:id="@+id/photoSpace_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0.5GBGB/10GB"
