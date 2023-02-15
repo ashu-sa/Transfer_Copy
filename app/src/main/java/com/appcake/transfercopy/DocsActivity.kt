@@ -12,11 +12,14 @@ import com.appcake.transfercopy.Adapter.DocAdapter
 import com.appcake.transfercopy.data.Docs
 import com.appcake.transfercopy.databinding.ActivityDocsBinding
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DocsActivity : AppCompatActivity() {
     private lateinit var binding:ActivityDocsBinding
     companion object{
         lateinit var docList:ArrayList<Docs>
+        lateinit var pdfList:ArrayList<File>
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +27,11 @@ class DocsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         docList = getDocs()
+        pdfList = findPdf(Environment.getDataDirectory().absoluteFile)
         val adapter = DocAdapter(docList)
 
         binding.apply {
-            docRcView.layoutManager = GridLayoutManager(this@DocsActivity,3)
+            docRcView.layoutManager = GridLayoutManager(this@DocsActivity,4)
             docRcView.adapter = adapter
         }
 
@@ -44,11 +48,11 @@ class DocsActivity : AppCompatActivity() {
             MediaStore.Files.FileColumns.DATE_ADDED
 
         )
-        val selection = "_data LIKE '%.pdf'"
-        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")
-        val selectionArgs = arrayOf("application/pdf", "application/msword")
+        val selection = MediaStore.Files.FileColumns.MIME_TYPE + " = ?"
+        val mimeType = arrayOf("application/pdf")
+        val selectionArgs = arrayOf(mimeType)
         val uri = MediaStore.Files.getContentUri("external")
-        val doccursor: Cursor = this@DocsActivity.contentResolver.query(uri, columns,null ,null,
+        val doccursor: Cursor = this@DocsActivity.contentResolver.query(uri,columns,null,null,
             MediaStore.Files.FileColumns.DATE_ADDED + " DESC")!!
 
         if (doccursor != null)
@@ -58,9 +62,10 @@ class DocsActivity : AppCompatActivity() {
                     val title = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME))
                     val path = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns.DATA))
                         try {
-                        val file = File(path)
-                        val docs = Docs(id, title)
-                        if (file.exists()) docList.add(docs)
+                                val docs = Docs(id, title)
+                                docList.add(docs)
+
+
 
                     }catch (e:java.lang.Exception){}
                 }while (doccursor.moveToNext())
@@ -69,5 +74,30 @@ class DocsActivity : AppCompatActivity() {
         return docList
 
     }
+    private fun checkOtherFileType(filePath: String): Boolean? {
+        if (!filePath.isNullOrEmpty()) {
+            val filePathInLowerCase = filePath.lowercase(Locale.getDefault())
+            if (filePathInLowerCase.endsWith(".pdf")) {
+                return true
+            }
+        }
+        return false
+    }
+    fun findPdf(file: File): ArrayList<File> {
+        val arrayList = arrayListOf<File>()
+        val files = file.listFiles()
+            if (files != null) {
+                for (singleFile in files) {
+                    if (singleFile.isDirectory && !singleFile.isHidden) {
+                        arrayList.addAll(findPdf(singleFile))
+                    } else {
+                        if (singleFile.name.endsWith(".pdf")) {
+                            arrayList.add(singleFile)
+                        }
+                    }
+                }
+            }
+            return arrayList
+        }
 
 }

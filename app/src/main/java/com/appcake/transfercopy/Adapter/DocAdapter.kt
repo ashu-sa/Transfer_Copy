@@ -7,8 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appcake.transfercopy.R
 import com.appcake.transfercopy.data.Docs
-import com.bumptech.glide.Glide
 import java.io.File
+import java.util.*
+
 
 class DocAdapter(val list: ArrayList<Docs>):RecyclerView.Adapter<DocAdapter.DocViewHolder>() {
     class DocViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -27,6 +28,16 @@ class DocAdapter(val list: ArrayList<Docs>):RecyclerView.Adapter<DocAdapter.DocV
     override fun onBindViewHolder(holder: DocViewHolder, position: Int) {
         var currentPosition = list[position]
         holder.docText.text = currentPosition.title
+
+    }
+    private fun checkOtherFileType(filePath: String): Boolean? {
+        if (!filePath.isNullOrEmpty()) {
+            val filePathInLowerCase = filePath.lowercase(Locale.getDefault())
+            if (filePathInLowerCase.endsWith(".pdf")) {
+                return true
+            }
+        }
+        return false
     }
 
 }

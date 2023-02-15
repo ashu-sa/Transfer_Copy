@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appcake.transfercopy.Adapter.ContactAdapter
@@ -14,9 +16,12 @@ import com.appcake.transfercopy.data.Contacts
 import com.appcake.transfercopy.data.Video
 import com.appcake.transfercopy.databinding.ActivityContactBinding
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ContactActivity : AppCompatActivity() {
     private lateinit var binding: ActivityContactBinding
+    private lateinit var tempList: ArrayList<Contacts>
     private lateinit var contactList: ArrayList<Contacts>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,11 +31,37 @@ class ContactActivity : AppCompatActivity() {
         val adapter = ContactAdapter(contactList)
         binding.apply {
             contactRcView.layoutManager = LinearLayoutManager(this@ContactActivity)
-            contactRcView.adapter = adapter
+            contactRcView.adapter = adapter }
+        binding.contactSearchview.setOnQueryTextListener(object:SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+
+                return false
+            }
+
+        })
+    }
+
+    private fun filterList(newText: String?) {
+        if(newText != null){
+            val filterdList = ArrayList<Contacts>()
+            for (i in contactList){
+                if (i.name.lowercase(Locale.ROOT).contains(newText)){
+                    filterdList.add(i)
+                }
+            }
+            if (filterdList.isEmpty()){
+                Toast.makeText(this, "No result found", Toast.LENGTH_SHORT).show()
+            }
         }
 
-
     }
+
     @SuppressLint("Range", "SuspiciousIndentation")
     private fun getContacts():ArrayList<Contacts>{
         var contactList: ArrayList<Contacts> = ArrayList()

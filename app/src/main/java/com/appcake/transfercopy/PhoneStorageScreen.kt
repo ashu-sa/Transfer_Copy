@@ -136,7 +136,7 @@ class PhoneStorageScreen : AppCompatActivity() {
     }
     private fun validatePermission() {
         Dexter.withContext(this)
-            .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.READ_CONTACTS,android.Manifest.permission.READ_CALENDAR)
+            .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.READ_CONTACTS,android.Manifest.permission.READ_CALENDAR,android.Manifest.permission.MANAGE_EXTERNAL_STORAGE)
             .withListener(object : MultiplePermissionsListener {
 
                 override fun onPermissionsChecked(p0: MultiplePermissionsReport?) {

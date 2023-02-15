@@ -24,6 +24,7 @@
             android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
             android:fontFamily="@font/notosans_semibold"
             android:text="Lorem.docx"/>
 
