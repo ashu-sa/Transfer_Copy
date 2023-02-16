@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.database.Cursor
 import android.os.Bundle
 import android.os.Environment
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +20,7 @@ class DocsActivity : AppCompatActivity() {
     private lateinit var binding:ActivityDocsBinding
     companion object{
         lateinit var docList:ArrayList<Docs>
-        lateinit var pdfList:ArrayList<File>
+        lateinit var pdfList:ArrayList<Docs>
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +28,8 @@ class DocsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         docList = getDocs()
-        pdfList = findPdf(Environment.getDataDirectory().absoluteFile)
-        val adapter = DocAdapter(docList)
+        pdfList = findPdf(File("/"))
+        val adapter = DocAdapter(pdfList)
 
         binding.apply {
             docRcView.layoutManager = GridLayoutManager(this@DocsActivity,4)
@@ -41,33 +42,37 @@ class DocsActivity : AppCompatActivity() {
     private fun getDocs():ArrayList<Docs>{
         var docList: ArrayList<Docs> = ArrayList()
         val columns = arrayOf(
-            MediaStore.Files.FileColumns._ID,
-            MediaStore.Files.FileColumns.DISPLAY_NAME,
-            MediaStore.Files.FileColumns.DATA,
-            MediaStore.Files.FileColumns.MIME_TYPE,
-            MediaStore.Files.FileColumns.DATE_ADDED
+            DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+            DocumentsContract.Document.COLUMN_MIME_TYPE,
+            DocumentsContract.Document.COLUMN_SIZE,
+            DocumentsContract.Document.COLUMN_DOCUMENT_ID,
 
         )
-        val selection = MediaStore.Files.FileColumns.MIME_TYPE + " = ?"
-        val mimeType = arrayOf("application/pdf")
-        val selectionArgs = arrayOf(mimeType)
+        val documentMimeTypes = arrayOf(
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.ms-powerpoint",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+
+        // Query the Documents Provider to retrieve all document files
+        val selection = "${DocumentsContract.Document.COLUMN_MIME_TYPE} IN (?, ?, ?, ?, ?, ?, ?)"
+        val selectionArgs = documentMimeTypes
         val uri = MediaStore.Files.getContentUri("external")
-        val doccursor: Cursor = this@DocsActivity.contentResolver.query(uri,columns,null,null,
-            MediaStore.Files.FileColumns.DATE_ADDED + " DESC")!!
+        val doccursor: Cursor = this@DocsActivity.contentResolver.query(uri,columns,null,null,"")!!
 
         if (doccursor != null)
             if (doccursor.moveToNext())
                 do {
-                    val id = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns._ID))
-                    val title = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME))
-                    val path = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns.DATA))
+                    val id = doccursor.getString(doccursor.getColumnIndex( DocumentsContract.Document.COLUMN_DOCUMENT_ID))
+                    val title = doccursor.getString(doccursor.getColumnIndex(DocumentsContract.Document.COLUMN_DISPLAY_NAME))
                         try {
                                 val docs = Docs(id, title)
                                 docList.add(docs)
-
-
-
-                    }catch (e:java.lang.Exception){}
+                        }catch (e:java.lang.Exception){}
                 }while (doccursor.moveToNext())
         doccursor?.close()
 
@@ -83,21 +88,32 @@ class DocsActivity : AppCompatActivity() {
         }
         return false
     }
-    fun findPdf(file: File): ArrayList<File> {
-        val arrayList = arrayListOf<File>()
-        val files = file.listFiles()
-            if (files != null) {
-                for (singleFile in files) {
-                    if (singleFile.isDirectory && !singleFile.isHidden) {
-                        arrayList.addAll(findPdf(singleFile))
+    fun findPdf(file: File): ArrayList<Docs> {
+        val extensions = arrayOf(".pdf", ".docx", ".ppt", ".xls")
+        val files = ArrayList<Docs>()
+        val stack = Stack<File>()
+        stack.push(file)
+
+        while (stack.isNotEmpty()) {
+            val dir = stack.pop()
+            val fileList = dir.listFiles()
+            if (fileList != null) {
+                for (file in fileList) {
+                    if (file.isDirectory) {
+                        stack.push(file)
                     } else {
-                        if (singleFile.name.endsWith(".pdf")) {
-                            arrayList.add(singleFile)
+                        for (extension in extensions) {
+                            if (file.name.endsWith(extension)) {
+                                files.add(Docs( file.path, file.name))
+                                break
+                            }
                         }
                     }
                 }
             }
-            return arrayList
         }
+        return files
+    }
 
 }
+

@@ -21,7 +21,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_10sdp"
             android:layout_margin="@dimen/_5sdp"
-            android:singleLine="true"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
