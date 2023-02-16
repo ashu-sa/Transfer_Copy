@@ -77,7 +77,7 @@ class CalenderActivity : AppCompatActivity() {
             CalendarContract.Events.CALENDAR_ID,
             CalendarContract.Events.TITLE,
             CalendarContract.Events.DTSTART,
-            CalendarContract.Events.EVENT_TIMEZONE
+            CalendarContract.Events.ORIGINAL_INSTANCE_TIME
         )
         val uri = Uri.parse("content://com.android.calendar/events")
         val calendercursor: Cursor = this@CalenderActivity.contentResolver.query(uri,columns, null, null,"")!!
@@ -85,12 +85,11 @@ class CalenderActivity : AppCompatActivity() {
         if (calendercursor != null)
             if (calendercursor.moveToNext())
                 do {
-                    val time = calendercursor.getString(calendercursor.getColumnIndex(CalendarContract.Events.EVENT_TIMEZONE))
-                    val date = calendercursor.getString(calendercursor.getColumnIndex(CalendarContract.Events.DTSTART))
+                    val date = calendercursor.getString(calendercursor.getColumnIndex(CalendarContract.Events.DTSTART)).toLong()
                     val title = calendercursor.getString(calendercursor.getColumnIndex(CalendarContract.Events.TITLE))
 
                     try {
-                        val calender = GoogleCalendar(title,date,time)
+                        val calender = GoogleCalendar(title,date)
                          eventList.add(calender)
 
                     }catch (e:java.lang.Exception){}

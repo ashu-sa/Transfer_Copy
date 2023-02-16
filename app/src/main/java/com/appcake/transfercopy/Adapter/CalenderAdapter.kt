@@ -1,5 +1,6 @@
 package com.appcake.transfercopy.Adapter
 
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,7 @@ class CalenderAdapter(private val list: ArrayList<GoogleCalendar>):Adapter<Calen
 
     override fun onBindViewHolder(holder: CalnderViewHolder, position: Int) {
         val currentPosition = list[position]
-        holder.textview.text = currentPosition.dtstart
+        holder.textview.text = DateUtils.formatElapsedTime(currentPosition.dtstart/1000)
         holder.textview2.text = currentPosition.title
     }
 }

@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
+import android.provider.ContactsContract
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -58,10 +60,6 @@ class PhoneStorageScreen : AppCompatActivity() {
 
         setProgressBar(totalSpaceInt,remainingSpaceInt)
 
-        binding.videoSpaceText.text = formatSize(videoSpace())
-        val photoFolder = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Documents")
-        val photoFolderSize = getFolderSize(photoFolder)
-        binding.photoSpaceText.text = formatSize(photoFolderSize)
 
         binding.apply {
             contactsLinearLayout.setOnClickListener {
@@ -94,6 +92,11 @@ class PhoneStorageScreen : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
+            calendarSizeText.text = "0 GB/ $iTotalSpace GB"
+            contactSizeText.text = "0 GB/ $iTotalSpace GB"
+            photoSpaceText.text = formatSize(photoSpace()) +"/ $iTotalSpace GB "
+            videoSpaceText.text = formatSize(videoSpace()) +"/ $iTotalSpace GB "
+            docSizeText.text = formatSize(docSpace()) +"/ $iTotalSpace GB "
         }
 
 
@@ -152,25 +155,56 @@ class PhoneStorageScreen : AppCompatActivity() {
 
             }).check()
     }
-    private fun videoSpace():Long {
-        val path = Environment.getExternalStorageDirectory().toString() + "/"
-        val directory = File(path)
-        val files = directory.listFiles()
-        val videoFiles = files.filter {
-            it.extension == "mp4" || it.extension == "3gp" || it.extension == "mkv" || it.extension == "avi"
+    private fun photoSpace():Long {
+        val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val projection = arrayOf(MediaStore.Images.Media.SIZE)
+
+       // Query the media provider to retrieve the size of all photos
+        var totalSize = 0L
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                val size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE))
+                totalSize += size
+            }
         }
-        var totalSize: Long = 0
-        for (file in videoFiles) {
-            totalSize += file.length()
-        }
-       return totalSize
+        cursor?.close()
+
+        return totalSize
     }
-    fun getFolderSize(dir: File): Long {
-        var size: Long = 0
-        dir.listFiles()?.forEach {
-            size += if (it.isDirectory) getFolderSize(it) else it.length()
+    private fun videoSpace():Long {
+        val uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        val projection = arrayOf(MediaStore.Video.Media.SIZE)
+
+       // Query the media provider to retrieve the size of all videos
+        var totalSize = 0L
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                val size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE))
+                totalSize += size
+            }
         }
-        return size
+        cursor?.close()
+
+        return totalSize
+    }
+    private fun docSpace():Long {
+        val uri = MediaStore.Files.getContentUri("external")
+        val projection = arrayOf(MediaStore.Files.FileColumns.SIZE)
+
+       // Query the media provider to retrieve the size of all docs
+        var totalSize = 0L
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                val size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE))
+                totalSize += size
+            }
+        }
+        cursor?.close()
+
+        return totalSize
     }
 
 
