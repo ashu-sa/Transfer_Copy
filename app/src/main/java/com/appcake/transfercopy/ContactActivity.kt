@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,14 +22,14 @@ import kotlin.collections.ArrayList
 
 class ContactActivity : AppCompatActivity() {
     private lateinit var binding: ActivityContactBinding
-    private lateinit var tempList: ArrayList<Contacts>
+    private lateinit var adapter:ContactAdapter
     private lateinit var contactList: ArrayList<Contacts>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityContactBinding.inflate(layoutInflater)
         setContentView(binding.root)
         contactList = getContacts()
-        val adapter = ContactAdapter(contactList)
+        adapter = ContactAdapter(contactList)
         binding.apply {
             contactRcView.layoutManager = LinearLayoutManager(this@ContactActivity)
             contactRcView.adapter = adapter }
@@ -56,7 +57,12 @@ class ContactActivity : AppCompatActivity() {
                 }
             }
             if (filterdList.isEmpty()){
-                Toast.makeText(this, "No result found", Toast.LENGTH_SHORT).show()
+                binding.notFoundText.visibility = View.VISIBLE
+                binding.contactRcView.visibility= View.INVISIBLE
+            }else{
+                binding.contactRcView.visibility= View.VISIBLE
+                binding.notFoundText.visibility = View.INVISIBLE
+                adapter.setFilteredList(filterdList)
             }
         }
 

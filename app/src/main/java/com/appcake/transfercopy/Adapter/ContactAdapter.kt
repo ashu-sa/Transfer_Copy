@@ -12,6 +12,10 @@ class ContactAdapter(var list:ArrayList<Contacts>): RecyclerView.Adapter<Contact
     class ContactViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var contactName = itemView.findViewById<TextView>(R.id.contact_text)
     }
+    fun setFilteredList(list:ArrayList<Contacts>){
+        this.list= list
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val view= LayoutInflater.from(parent.context).inflate(R.layout.each_contacts_layout,parent,false)
