@@ -16,7 +16,6 @@ import android.widget.Toast
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.annotation.RequiresApi
-import com.appcake.transfercopy.Fragments.QRcodeFragment
 import com.appcake.transfercopy.databinding.ActivityFileTransferBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -58,11 +57,6 @@ class FileTransferActivity : AppCompatActivity() {
 
             sendFileCard.setOnClickListener {
                 showCustomDialog()
-
-//                        val fragment = QRcodeFragment()
-//                        supportFragmentManager.beginTransaction().replace(R.id.container,fragment).commit
-
-
             }
         }
     }
@@ -70,7 +64,7 @@ class FileTransferActivity : AppCompatActivity() {
     private fun showCustomDialog() {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
+        dialog.setCancelable(true)
         dialog.setContentView(R.layout.custom_dialog_qrcode)
         val image = dialog.findViewById<ImageView>(R.id.qr_code)
         val windowManager: WindowManager = getSystemService(WINDOW_SERVICE) as WindowManager
@@ -81,7 +75,7 @@ class FileTransferActivity : AppCompatActivity() {
         val height = point.y
         var dimen = if (width < height) width else height
         dimen = dimen * 3 / 4
-        val qrEncoder = QRGEncoder("value", null, QRGContents.Type.TEXT, dimen)
+        val qrEncoder = QRGEncoder("value2", null, QRGContents.Type.TEXT, dimen)
         try {
             val bitmap = qrEncoder.getBitmap(0)
             image.setImageBitmap(bitmap)
@@ -89,6 +83,7 @@ class FileTransferActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        dialog.show()
     }
 
     private fun validatePermission() {
@@ -100,7 +95,7 @@ class FileTransferActivity : AppCompatActivity() {
                 }
 
                 override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                    Toast.makeText(this@FileTransferActivity, "Permission 2", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@FileTransferActivity, "Permission Denied", Toast.LENGTH_SHORT).show()
 
                 }
 
