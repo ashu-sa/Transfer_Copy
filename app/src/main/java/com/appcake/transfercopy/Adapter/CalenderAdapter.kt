@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.appcake.transfercopy.R
 import com.appcake.transfercopy.data.GoogleCalendar
-
 class CalenderAdapter(private val list: ArrayList<GoogleCalendar>):Adapter<CalenderAdapter.CalnderViewHolder>() {
     class CalnderViewHolder(itemView: View):ViewHolder(itemView) {
         val textview = itemView.findViewById<TextView>(R.id.time_text)
@@ -28,7 +27,7 @@ class CalenderAdapter(private val list: ArrayList<GoogleCalendar>):Adapter<Calen
 
     override fun onBindViewHolder(holder: CalnderViewHolder, position: Int) {
         val currentPosition = list[position]
-        holder.textview.text = DateUtils.formatElapsedTime(currentPosition.dtstart/1000)
+        holder.textview.text = currentPosition.dtstart
         holder.textview2.text = currentPosition.title
     }
 }

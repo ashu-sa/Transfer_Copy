@@ -3,6 +3,7 @@ package com.appcake.transfercopy
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -60,19 +61,26 @@ class CalenderActivity : AppCompatActivity() {
 
 
 
-        binding.allEventFilesText.setOnClickListener {
-            val intent = Intent(this@CalenderActivity,AllEventsActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+        binding.apply {
+            allEventFilesText.setOnClickListener {
+                val intent = Intent(this@CalenderActivity,AllEventsActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
         }
     }
     class DayViewContainer(view: View) : ViewContainer(view) {
         val textView = view.findViewById<TextView>(R.id.date_text) }
 
     @SuppressLint("Range", "SuspiciousIndentation")
-    private fun getEvents():ArrayList<GoogleCalendar>{
+    fun getEvents():ArrayList<GoogleCalendar>{
         var eventList: ArrayList<GoogleCalendar> = ArrayList()
+        val startTime = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+        }.timeInMillis
         val columns = arrayOf(
             CalendarContract.Events.CALENDAR_ID,
             CalendarContract.Events.TITLE,
@@ -88,8 +96,11 @@ class CalenderActivity : AppCompatActivity() {
                     val date = calendercursor.getString(calendercursor.getColumnIndex(CalendarContract.Events.DTSTART)).toLong()
                     val title = calendercursor.getString(calendercursor.getColumnIndex(CalendarContract.Events.TITLE))
 
+                    val startDate = Calendar.getInstance().apply { timeInMillis = date }
+                    val startTimeString = String.format("%02d:%02d", startDate.get(Calendar.HOUR_OF_DAY), startDate.get(Calendar.MINUTE))
+
                     try {
-                        val calender = GoogleCalendar(title,date)
+                        val calender = GoogleCalendar(title,startTimeString)
                          eventList.add(calender)
 
                     }catch (e:java.lang.Exception){}

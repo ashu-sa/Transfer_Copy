@@ -27,19 +27,12 @@ import com.karumi.dexter.listener.single.PermissionListener
 class FileTransferActivity : AppCompatActivity() {
     private  lateinit var binding: ActivityFileTransferBinding
     private lateinit var manager: WifiManager
-
-
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityFileTransferBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         manager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
-
-
         binding.apply {
             backImg.setOnClickListener {
                 val intent = Intent(Intent(this@FileTransferActivity,MainActivity::class.java))
@@ -85,7 +78,6 @@ class FileTransferActivity : AppCompatActivity() {
         }
         dialog.show()
     }
-
     private fun validatePermission() {
         Dexter.withContext(this)
             .withPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -109,5 +101,4 @@ class FileTransferActivity : AppCompatActivity() {
 
             }).check()
     }
-
 }

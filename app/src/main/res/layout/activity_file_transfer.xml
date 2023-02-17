@@ -137,17 +137,6 @@
 
     </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:id="@+id/qr_code"
-        android:layout_width="@dimen/_120sdp"
-        android:layout_height="@dimen/_120sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginBottom="76dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/receive_linearLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

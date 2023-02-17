@@ -1,30 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/_80sdp"
-    android:layout_height="@dimen/_80sdp"
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_100sdp"
+    android:layout_height="@dimen/_100sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="#625A6A"
-    app:cardCornerRadius="@dimen/_8sdp">
+    android:background="@color/transparent"
+   >
 
-        <ImageView
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/folder"/>
-        <TextView
-            android:id="@+id/doc_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_10sdp"
-            android:layout_margin="@dimen/_5sdp"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:fontFamily="@font/notosans_semibold"
-            android:text="Lorem.docx"/>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="#625A6A"
+            android:layout_margin="@dimen/_10sdp"
+            app:cardCornerRadius="@dimen/_8sdp">
 
-</androidx.cardview.widget.CardView>
+                <ImageView
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/folder"/>
+                <TextView
+                    android:id="@+id/doc_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:fontFamily="@font/notosans_semibold"
+                    android:text="Lorem.docx"/>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import com.appcake.transfercopy.databinding.ActivityPhoneStorageScreenBinding
-import com.appcake.transfercopy.databinding.FragmentQRcodeBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken

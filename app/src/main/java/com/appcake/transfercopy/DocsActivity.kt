@@ -2,11 +2,11 @@ package com.appcake.transfercopy
 
 import android.annotation.SuppressLint
 import android.database.Cursor
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.webkit.MimeTypeMap
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.appcake.transfercopy.Adapter.DocAdapter
@@ -22,53 +22,37 @@ class DocsActivity : AppCompatActivity() {
         lateinit var docList:ArrayList<Docs>
         lateinit var pdfList:ArrayList<Docs>
     }
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDocsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         docList = getDocs()
-        pdfList = findPdf(File("/"))
-        val adapter = DocAdapter(pdfList)
-
+        pdfList = findPdf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS))
+        val adapter = DocAdapter(docList)
         binding.apply {
-            docRcView.layoutManager = GridLayoutManager(this@DocsActivity,4)
+            docRcView.layoutManager = GridLayoutManager(this@DocsActivity,3)
             docRcView.adapter = adapter
         }
-
-
     }
+    @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("Range", "SuspiciousIndentation")
     private fun getDocs():ArrayList<Docs>{
         var docList: ArrayList<Docs> = ArrayList()
         val columns = arrayOf(
-            DocumentsContract.Document.COLUMN_DISPLAY_NAME,
-            DocumentsContract.Document.COLUMN_MIME_TYPE,
-            DocumentsContract.Document.COLUMN_SIZE,
-            DocumentsContract.Document.COLUMN_DOCUMENT_ID,
-
+            MediaStore.Files.FileColumns._ID,
+            MediaStore.Files.FileColumns.DISPLAY_NAME,
+            MediaStore.Files.FileColumns.SIZE
         )
-        val documentMimeTypes = arrayOf(
-            "application/pdf",
-            "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "application/vnd.ms-powerpoint",
-            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            "application/vnd.ms-excel",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
-
-        // Query the Documents Provider to retrieve all document files
-        val selection = "${DocumentsContract.Document.COLUMN_MIME_TYPE} IN (?, ?, ?, ?, ?, ?, ?)"
-        val selectionArgs = documentMimeTypes
         val uri = MediaStore.Files.getContentUri("external")
         val doccursor: Cursor = this@DocsActivity.contentResolver.query(uri,columns,null,null,"")!!
 
         if (doccursor != null)
             if (doccursor.moveToNext())
                 do {
-                    val id = doccursor.getString(doccursor.getColumnIndex( DocumentsContract.Document.COLUMN_DOCUMENT_ID))
-                    val title = doccursor.getString(doccursor.getColumnIndex(DocumentsContract.Document.COLUMN_DISPLAY_NAME))
+                    val id = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns._ID))
+                    val title = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME))
                         try {
                                 val docs = Docs(id, title)
                                 docList.add(docs)
@@ -77,7 +61,6 @@ class DocsActivity : AppCompatActivity() {
         doccursor?.close()
 
         return docList
-
     }
     private fun checkOtherFileType(filePath: String): Boolean? {
         if (!filePath.isNullOrEmpty()) {
