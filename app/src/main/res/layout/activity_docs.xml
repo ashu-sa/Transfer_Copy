@@ -99,6 +99,7 @@
         android:layout_height="@dimen/_32sdp"
         android:layout_margin="@dimen/_14sdp"
         android:background="@drawable/search_bg"
+        app:queryBackground="@color/transparent"
         app:searchIcon="@drawable/search3"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -116,5 +117,20 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/doc_searchView" />
+    <TextView
+        android:id="@+id/not_found_text"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosans_semibold"
+        android:text="No Docs Found!"
+        android:textColor="#CDCDCD"
+        android:textSize="@dimen/_14ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

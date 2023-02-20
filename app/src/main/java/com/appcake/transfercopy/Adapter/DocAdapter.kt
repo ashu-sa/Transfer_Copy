@@ -6,14 +6,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appcake.transfercopy.R
+import com.appcake.transfercopy.data.Contacts
 import com.appcake.transfercopy.data.Docs
 import java.io.File
 import java.util.*
 
 
-class DocAdapter(val list: ArrayList<Docs>):RecyclerView.Adapter<DocAdapter.DocViewHolder>() {
+class DocAdapter(var list: ArrayList<Docs>):RecyclerView.Adapter<DocAdapter.DocViewHolder>() {
     class DocViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var docText = itemView.findViewById<TextView>(R.id.doc_text)
+    }
+    fun setFilteredList(list:ArrayList<Docs>){
+        this.list = list
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DocViewHolder {

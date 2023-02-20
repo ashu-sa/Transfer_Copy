@@ -6,10 +6,14 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.View
+import android.widget.SearchView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.appcake.transfercopy.Adapter.ContactAdapter
 import com.appcake.transfercopy.Adapter.DocAdapter
+import com.appcake.transfercopy.data.Contacts
 import com.appcake.transfercopy.data.Docs
 import com.appcake.transfercopy.databinding.ActivityDocsBinding
 import java.io.File
@@ -18,6 +22,7 @@ import kotlin.collections.ArrayList
 
 class DocsActivity : AppCompatActivity() {
     private lateinit var binding:ActivityDocsBinding
+    private lateinit var adapter: DocAdapter
     companion object{
         lateinit var docList:ArrayList<Docs>
         lateinit var pdfList:ArrayList<Docs>
@@ -30,11 +35,24 @@ class DocsActivity : AppCompatActivity() {
 
         docList = getDocs()
         pdfList = findPdf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS))
-        val adapter = DocAdapter(docList)
+        adapter = DocAdapter(docList)
         binding.apply {
             docRcView.layoutManager = GridLayoutManager(this@DocsActivity,3)
             docRcView.adapter = adapter
         }
+        binding.docSearchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+
+                return false
+            }
+
+        })
     }
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("Range", "SuspiciousIndentation")
@@ -97,6 +115,24 @@ class DocsActivity : AppCompatActivity() {
         }
         return files
     }
+    private fun filterList(newText: String?) {
+        if(newText != null){
+            val filterdList = ArrayList<Docs>()
+            for (i in docList){
+                if (i.title.lowercase(Locale.ROOT).contains(newText)){
+                    filterdList.add(i)
+                }
+            }
+            if (filterdList.isEmpty()){
+                binding.notFoundText.visibility = View.VISIBLE
+                binding.docRcView.visibility= View.INVISIBLE
+            }else{
+                binding.docRcView.visibility= View.VISIBLE
+                binding.notFoundText.visibility = View.INVISIBLE
+                adapter.setFilteredList(filterdList)
+            }
+        }
 
+    }
 }
 
