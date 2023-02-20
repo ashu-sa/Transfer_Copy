@@ -1,5 +1,6 @@
 package com.appcake.transfercopy
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.appcake.transfercopy.Adapter.ViewPagerAdapter
@@ -30,6 +31,13 @@ class AllEventsActivity : AppCompatActivity() {
         val tabLayout = binding.tabLayout
         val adapter = ViewPagerAdapter(supportFragmentManager,lifecycle)
         viewPager.adapter = adapter
+
+        binding.backImg.setOnClickListener {
+            val intent = Intent(Intent(this@AllEventsActivity,PhoneStorageScreen::class.java))
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
 
         TabLayoutMediator(tabLayout,viewPager){tab,position->
             tab.text = fgArray[position]

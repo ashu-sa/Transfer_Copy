@@ -85,6 +85,13 @@ class PhoneStorageScreen : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
+            backImg.setOnClickListener {
+                val intent = Intent(Intent(this@PhoneStorageScreen,FileTransferActivity::class.java))
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+
             calenderLinearLayout.setOnClickListener {
                 val intent = Intent(this@PhoneStorageScreen,CalenderActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

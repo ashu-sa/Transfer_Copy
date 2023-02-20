@@ -1,5 +1,6 @@
 package com.appcake.transfercopy
 
+import android.content.Intent
 import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,12 @@ class PhotoActivity : AppCompatActivity() {
             photoRcView.layoutManager =GridLayoutManager(this@PhotoActivity,4
             )
             photoRcView.adapter = adapter
+        }
+        binding.backImg.setOnClickListener {
+            val intent = Intent(Intent(this@PhotoActivity,PhoneStorageScreen::class.java))
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
 
     }

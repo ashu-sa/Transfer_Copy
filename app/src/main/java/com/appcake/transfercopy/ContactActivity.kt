@@ -1,6 +1,7 @@
 package com.appcake.transfercopy
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -46,6 +47,13 @@ class ContactActivity : AppCompatActivity() {
             }
 
         })
+        binding.backImg.setOnClickListener {
+            val intent = Intent(Intent(this@ContactActivity,PhoneStorageScreen::class.java))
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+
     }
 
     private fun filterList(newText: String?) {
