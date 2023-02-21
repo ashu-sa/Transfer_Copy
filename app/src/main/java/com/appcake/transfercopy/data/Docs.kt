@@ -1,3 +1,3 @@
 package com.appcake.transfercopy.data
 
-data class Docs (val path: String, val title:String)
+data class Docs (val title: String, val path: String, val size: Long)

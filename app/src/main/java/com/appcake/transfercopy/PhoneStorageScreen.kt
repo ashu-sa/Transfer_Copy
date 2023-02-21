@@ -1,42 +1,49 @@
 package com.appcake.transfercopy
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.net.wifi.p2p.WifiP2pDeviceList
-import android.net.wifi.p2p.WifiP2pInfo
-import android.net.wifi.p2p.WifiP2pManager
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
-import android.provider.ContactsContract
 import android.provider.MediaStore
-import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.appcake.transfercopy.databinding.ActivityPhoneStorageScreenBinding
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionDeniedResponse
-import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.karumi.dexter.listener.single.PermissionListener
 import java.io.File
 import java.util.*
 
 class PhoneStorageScreen : AppCompatActivity() {
     private lateinit var binding: ActivityPhoneStorageScreenBinding
-
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
+    private var isReadPermissionGranted = false
+    private var isContactPermissionGranted = false
+    private var isCalendarPermissionGranted = false
+    private var isEXternalStoragePermissionGranted = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityPhoneStorageScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        validatePermission()
+        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions ->
+
+            isReadPermissionGranted = permissions[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isReadPermissionGranted
+            isContactPermissionGranted = permissions[android.Manifest.permission.READ_CONTACTS] ?: isContactPermissionGranted
+            isCalendarPermissionGranted = permissions[android.Manifest.permission.READ_CALENDAR] ?: isCalendarPermissionGranted
+            isEXternalStoragePermissionGranted = permissions[android.Manifest.permission.MANAGE_EXTERNAL_STORAGE] ?: isEXternalStoragePermissionGranted
+
+        }
+
+//        requestPermission()
+
+//        validatePermission()
 
         val iPath: File = Environment.getDataDirectory()
         val iStat = StatFs(iPath.path)
@@ -212,7 +219,54 @@ class PhoneStorageScreen : AppCompatActivity() {
 
         return totalSize
     }
+    private fun requestPermission(){
 
+        isReadPermissionGranted = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+
+        isContactPermissionGranted = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.READ_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
+
+        isCalendarPermissionGranted = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.READ_CALENDAR
+        ) == PackageManager.PERMISSION_GRANTED
+
+        isEXternalStoragePermissionGranted = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val permissionRequest : MutableList<String> = ArrayList()
+
+        if (!isReadPermissionGranted){
+
+            permissionRequest.add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        if (!isContactPermissionGranted){
+
+            permissionRequest.add(android.Manifest.permission.READ_CONTACTS)
+        }
+
+        if (!isCalendarPermissionGranted){
+
+            permissionRequest.add(android.Manifest.permission.READ_CALENDAR)
+        }
+        if (!isEXternalStoragePermissionGranted){
+
+            permissionRequest.add(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+        }
+        if (permissionRequest.isNotEmpty()){
+
+            permissionLauncher.launch(permissionRequest.toTypedArray())
+        }
+
+    }
 
 
 }

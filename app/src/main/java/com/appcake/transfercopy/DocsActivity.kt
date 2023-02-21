@@ -1,41 +1,37 @@
 package com.appcake.transfercopy
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.SearchView
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.appcake.transfercopy.Adapter.ContactAdapter
 import com.appcake.transfercopy.Adapter.DocAdapter
-import com.appcake.transfercopy.data.Contacts
 import com.appcake.transfercopy.data.Docs
 import com.appcake.transfercopy.databinding.ActivityDocsBinding
-import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
 class DocsActivity : AppCompatActivity() {
     private lateinit var binding:ActivityDocsBinding
     private lateinit var adapter: DocAdapter
-    companion object{
-        lateinit var docList:ArrayList<Docs>
-        lateinit var pdfList:ArrayList<Docs>
+    companion object {
+        lateinit var docList: ArrayList<Docs>
+        lateinit var pdfList: ArrayList<String>
     }
-    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDocsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        docList = getDocs()
-        pdfList = findPdf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS))
+        docList = getAllDocs()
+        pdfList = getPdfs()
         adapter = DocAdapter(docList)
         binding.apply {
             docRcView.layoutManager = GridLayoutManager(this@DocsActivity,3)
@@ -52,7 +48,6 @@ class DocsActivity : AppCompatActivity() {
 
                 return false
             }
-
         })
         binding.backImg.setOnClickListener {
             val intent = Intent(Intent(this@DocsActivity,PhoneStorageScreen::class.java))
@@ -61,66 +56,63 @@ class DocsActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-    @RequiresApi(Build.VERSION_CODES.Q)
-    @SuppressLint("Range", "SuspiciousIndentation")
-    private fun getDocs():ArrayList<Docs>{
-        var docList: ArrayList<Docs> = ArrayList()
-        val columns = arrayOf(
-            MediaStore.Files.FileColumns._ID,
-            MediaStore.Files.FileColumns.DISPLAY_NAME,
+
+    private fun getDocs(context: Context):List<Docs>{
+        val pdfFiles = ArrayList<Docs>()
+        val uri = MediaStore.Files.getContentUri("external")
+        val projection = arrayOf(
+            MediaStore.Files.FileColumns.DATA,
+            MediaStore.Files.FileColumns.TITLE,
             MediaStore.Files.FileColumns.SIZE
         )
-        val uri = MediaStore.Files.getContentUri("external")
-        val doccursor: Cursor = this@DocsActivity.contentResolver.query(uri,columns,null,null,"")!!
+        val selection = "${MediaStore.Files.FileColumns.DATA} LIKE ?"
+        val selectionArgs = arrayOf("%${".docx"}")
 
-        if (doccursor != null)
-            if (doccursor.moveToNext())
-                do {
-                    val id = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns._ID))
-                    val title = doccursor.getString(doccursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME))
-                        try {
-                                val docs = Docs(id, title)
-                                docList.add(docs)
-                        }catch (e:java.lang.Exception){}
-                }while (doccursor.moveToNext())
-        doccursor?.close()
+        context.contentResolver.query(uri, projection,selection,selectionArgs, null)?.use { cursor ->
+            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
+            val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE)
+            val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE)
 
-        return docList
-    }
-    private fun checkOtherFileType(filePath: String): Boolean? {
-        if (!filePath.isNullOrEmpty()) {
-            val filePathInLowerCase = filePath.lowercase(Locale.getDefault())
-            if (filePathInLowerCase.endsWith(".pdf")) {
-                return true
-            }
-        }
-        return false
-    }
-    fun findPdf(file: File): ArrayList<Docs> {
-        val extensions = arrayOf(".pdf", ".docx", ".ppt", ".xls")
-        val files = ArrayList<Docs>()
-        val stack = Stack<File>()
-        stack.push(file)
+            while (cursor.moveToNext()) {
+                val path = cursor.getString(dataColumn)
+                val name = cursor.getString(titleColumn)
+                val size = cursor.getLong(sizeColumn)
 
-        while (stack.isNotEmpty()) {
-            val dir = stack.pop()
-            val fileList = dir.listFiles()
-            if (fileList != null) {
-                for (file in fileList) {
-                    if (file.isDirectory) {
-                        stack.push(file)
-                    } else {
-                        for (extension in extensions) {
-                            if (file.name.endsWith(extension)) {
-                                files.add(Docs( file.path, file.name))
-                                break
-                            }
-                        }
-                    }
+                if (path.endsWith(".pdf") || path.endsWith(".doc") || path.endsWith(".docx")) {
+                    pdfFiles.add(Docs(name, path, size))
                 }
             }
         }
-        return files
+
+        return pdfFiles
+    }
+    private fun getPdfs():ArrayList<String>{
+        val selection = MediaStore.Files.FileColumns.MIME_TYPE+"=?"
+        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("pdf")
+        val selectionArgs = arrayOf(mimeType)
+        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL)
+
+        } else {
+            MediaStore.Files.getContentUri("external")
+        }
+        val projection = arrayOf(
+            MediaStore.Files.FileColumns.DATA,
+            MediaStore.Files.FileColumns.DISPLAY_NAME,
+            MediaStore.Files.FileColumns.SIZE)
+        val docCursor: Cursor = this.contentResolver.query(uri,projection,null,null,null)!!
+        val pdfFiles = ArrayList<String>()
+        if (docCursor != null){
+            while (docCursor.moveToNext()){
+                val index = docCursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
+                val path = docCursor.getString(index)
+                pdfFiles.add(path)
+            }
+            docCursor.close()
+        }
+      return pdfFiles
+
     }
     private fun filterList(newText: String?) {
         if(newText != null){
@@ -141,5 +133,35 @@ class DocsActivity : AppCompatActivity() {
         }
 
     }
+    private fun getAllDocs():ArrayList<Docs>{
+        var docList: ArrayList<Docs> = ArrayList()
+        val columns = arrayOf(
+            MediaStore.Files.FileColumns.DATA,
+            MediaStore.Files.FileColumns.DISPLAY_NAME,
+            MediaStore.Files.FileColumns.SIZE
+        )
+        val uri = MediaStore.Files.getContentUri("external")
+        val cursor: Cursor = this@DocsActivity.contentResolver.query(uri,columns,null,null,"")!!
+
+        if (cursor != null)
+            if (cursor.moveToNext())
+                do {
+                    val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
+                    val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)
+                    val sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE)
+                    val path = cursor.getString(dataColumn)
+                    val name = cursor.getString(titleColumn)
+                    val size = cursor.getLong(sizeColumn)
+
+                    try {
+                        val docs = Docs(name,path,size)
+                        docList.add(docs)
+                    }catch (e:java.lang.Exception){}
+                }while (cursor.moveToNext())
+        cursor?.close()
+
+        return docList
+    }
+
 }
 

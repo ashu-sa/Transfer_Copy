@@ -2,6 +2,7 @@ package com.appcake.transfercopy
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Point
 import android.net.wifi.WifiManager
 import android.net.wifi.p2p.*
@@ -15,24 +16,31 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import com.appcake.transfercopy.databinding.ActivityFileTransferBinding
 import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
+import java.util.ArrayList
 
 class FileTransferActivity : AppCompatActivity() {
     private  lateinit var binding: ActivityFileTransferBinding
     private lateinit var manager: WifiManager
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityFileTransferBinding.inflate(layoutInflater)
         setContentView(binding.root)
         manager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+        validatePermission()
         binding.apply {
             backImg.setOnClickListener {
                 val intent = Intent(Intent(this@FileTransferActivity,MainActivity::class.java))
@@ -80,25 +88,28 @@ class FileTransferActivity : AppCompatActivity() {
     }
     private fun validatePermission() {
         Dexter.withContext(this)
-            .withPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
-            .withListener(object : PermissionListener {
-                override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+            .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.READ_CONTACTS,android.Manifest.permission.READ_CALENDAR)
+            .withListener(object : MultiplePermissionsListener {
 
-                }
-
-                override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                    Toast.makeText(this@FileTransferActivity, "Permission Denied", Toast.LENGTH_SHORT).show()
-
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                  report.let {
+                      if (report!!.areAllPermissionsGranted()){
+                          
+                      }else{
+                          Toast.makeText(this@FileTransferActivity, "Please Grant Permissions to use the App", Toast.LENGTH_SHORT).show()
+                      }
+                  }
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    p0: PermissionRequest?,
-                    p1: PermissionToken?
+                    permission: MutableList<PermissionRequest>?,
+                    token: PermissionToken?
                 ) {
-                    Toast.makeText(this@FileTransferActivity, "Permission 3", Toast.LENGTH_SHORT).show()
-
+                  token?.continuePermissionRequest()
                 }
 
-            }).check()
+            }).withErrorListener{
+                Toast.makeText(this, it.name , Toast.LENGTH_SHORT).show()
+            }.check()
     }
 }

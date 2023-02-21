@@ -33,6 +33,9 @@ class DocAdapter(var list: ArrayList<Docs>):RecyclerView.Adapter<DocAdapter.DocV
     override fun onBindViewHolder(holder: DocViewHolder, position: Int) {
         var currentPosition = list[position]
         holder.docText.text = currentPosition.title
+//        val path = list.get(position)
+//        val pdfFile:File = File(path)
+//        holder.docText.text = pdfFile.name
 
     }
     private fun checkOtherFileType(filePath: String): Boolean? {
