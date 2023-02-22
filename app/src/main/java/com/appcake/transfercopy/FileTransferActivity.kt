@@ -5,12 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Point
-import android.net.wifi.WifiManager
 import android.net.wifi.p2p.*
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.provider.Settings
+import android.util.Log
 import android.view.Display
 import android.view.Window
 import android.view.WindowManager
@@ -31,10 +32,15 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
+import java.net.InetAddress
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.util.ArrayList
+import android.net.wifi.WifiManager as WifiManager
 
 class FileTransferActivity : AppCompatActivity() {
     private  lateinit var binding: ActivityFileTransferBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +49,7 @@ class FileTransferActivity : AppCompatActivity() {
 
         val manager: WifiP2pManager = getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
         val channel: WifiP2pManager.Channel = manager.initialize(this, Looper.getMainLooper(), null)
+        val wifimanager: WifiManager = getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
 
         validatePermission()
         binding.apply {
@@ -54,9 +61,13 @@ class FileTransferActivity : AppCompatActivity() {
             }
 
            receiveFileCard.setOnClickListener {
+               if (!wifimanager.isWifiEnabled){
+                   val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+                   startActivity(intent)
+               }
                val permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
                if (ContextCompat.checkSelfPermission(this@FileTransferActivity, permission) == PackageManager.PERMISSION_GRANTED) {
-                   val intent = Intent(this@FileTransferActivity,ReceiveActivity::class.java)
+                   val intent = Intent(this@FileTransferActivity,PhoneStorageScreen::class.java)
                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                    startActivity(intent)
@@ -67,6 +78,10 @@ class FileTransferActivity : AppCompatActivity() {
            }
 
             sendFileCard.setOnClickListener {
+                if (!wifimanager.isWifiEnabled){
+                    val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+                    startActivity(intent)
+                }
                 showCustomDialog()
             }
         }
@@ -86,7 +101,7 @@ class FileTransferActivity : AppCompatActivity() {
         val height = point.y
         var dimen = if (width < height) width else height
         dimen = dimen * 3 / 4
-        val qrEncoder = QRGEncoder("Something", null, QRGContents.Type.TEXT, dimen)
+        val qrEncoder = QRGEncoder(getIPAddress(), null, QRGContents.Type.TEXT, dimen)
         try {
             val bitmap = qrEncoder.getBitmap(0)
             image.setImageBitmap(bitmap)
@@ -121,5 +136,19 @@ class FileTransferActivity : AppCompatActivity() {
             }).withErrorListener{
                 Toast.makeText(this, it.name , Toast.LENGTH_SHORT).show()
             }.check()
+    }
+    fun getIPAddress(): String {
+        var ipAddress = ""
+        try {
+            val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val wifiInfo = wifiManager.connectionInfo
+            val ip = wifiInfo.ipAddress
+            ipAddress = InetAddress.getByAddress(
+                ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ip).array()
+            ).hostAddress
+        } catch (ex: Exception) {
+            Log.e("IP Address", ex.toString())
+        }
+        return ipAddress
     }
 }

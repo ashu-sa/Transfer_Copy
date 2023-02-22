@@ -22,28 +22,10 @@ import java.util.*
 
 class PhoneStorageScreen : AppCompatActivity() {
     private lateinit var binding: ActivityPhoneStorageScreenBinding
-    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
-    private var isReadPermissionGranted = false
-    private var isContactPermissionGranted = false
-    private var isCalendarPermissionGranted = false
-    private var isEXternalStoragePermissionGranted = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityPhoneStorageScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions ->
-
-            isReadPermissionGranted = permissions[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isReadPermissionGranted
-            isContactPermissionGranted = permissions[android.Manifest.permission.READ_CONTACTS] ?: isContactPermissionGranted
-            isCalendarPermissionGranted = permissions[android.Manifest.permission.READ_CALENDAR] ?: isCalendarPermissionGranted
-            isEXternalStoragePermissionGranted = permissions[android.Manifest.permission.MANAGE_EXTERNAL_STORAGE] ?: isEXternalStoragePermissionGranted
-
-        }
-
-//        requestPermission()
-
-//        validatePermission()
 
         val iPath: File = Environment.getDataDirectory()
         val iStat = StatFs(iPath.path)
@@ -123,9 +105,6 @@ class PhoneStorageScreen : AppCompatActivity() {
             docSizeText.text = formatSize(docSpace()) +"/ $iTotalSpace GB "
         }
 
-
-
-
     }
     private fun formatSize(size: Long): String? {
         var size = size
@@ -160,24 +139,6 @@ class PhoneStorageScreen : AppCompatActivity() {
             progressBar.progress = progress
             progressBar.max = max
         }
-    }
-    private fun validatePermission() {
-        Dexter.withContext(this)
-            .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.READ_CONTACTS,android.Manifest.permission.READ_CALENDAR,android.Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-            .withListener(object : MultiplePermissionsListener {
-
-                override fun onPermissionsChecked(p0: MultiplePermissionsReport?) {
-
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<PermissionRequest>?,
-                    p1: PermissionToken?
-                ) {
-                    Toast.makeText(this@PhoneStorageScreen, "Permission 3", Toast.LENGTH_SHORT).show()
-                }
-
-            }).check()
     }
     private fun photoSpace():Long {
         val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -234,7 +195,4 @@ class PhoneStorageScreen : AppCompatActivity() {
 
         return totalSize
     }
-
-
-
 }
