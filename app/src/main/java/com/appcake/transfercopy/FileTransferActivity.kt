@@ -1,6 +1,7 @@
 package com.appcake.transfercopy
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Point
@@ -9,6 +10,7 @@ import android.net.wifi.p2p.*
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.view.Display
 import android.view.Window
 import android.view.WindowManager
@@ -33,13 +35,15 @@ import java.util.ArrayList
 
 class FileTransferActivity : AppCompatActivity() {
     private  lateinit var binding: ActivityFileTransferBinding
-    private lateinit var manager: WifiManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityFileTransferBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        manager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+
+        val manager: WifiP2pManager = getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
+        val channel: WifiP2pManager.Channel = manager.initialize(this, Looper.getMainLooper(), null)
+
         validatePermission()
         binding.apply {
             backImg.setOnClickListener {
@@ -50,10 +54,16 @@ class FileTransferActivity : AppCompatActivity() {
             }
 
            receiveFileCard.setOnClickListener {
-               val intent = Intent(this@FileTransferActivity,PhoneStorageScreen::class.java)
-               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-               intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-               startActivity(intent)
+               val permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
+               if (ContextCompat.checkSelfPermission(this@FileTransferActivity, permission) == PackageManager.PERMISSION_GRANTED) {
+                   val intent = Intent(this@FileTransferActivity,ReceiveActivity::class.java)
+                   intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                   intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                   startActivity(intent)
+               } else {
+                   Toast.makeText(this@FileTransferActivity, "Please Grant All Permissions Manually", Toast.LENGTH_SHORT).show()
+               }
+              
            }
 
             sendFileCard.setOnClickListener {
@@ -76,7 +86,7 @@ class FileTransferActivity : AppCompatActivity() {
         val height = point.y
         var dimen = if (width < height) width else height
         dimen = dimen * 3 / 4
-        val qrEncoder = QRGEncoder("value2", null, QRGContents.Type.TEXT, dimen)
+        val qrEncoder = QRGEncoder("Something", null, QRGContents.Type.TEXT, dimen)
         try {
             val bitmap = qrEncoder.getBitmap(0)
             image.setImageBitmap(bitmap)

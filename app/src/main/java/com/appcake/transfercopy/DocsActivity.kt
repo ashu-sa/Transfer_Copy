@@ -90,7 +90,8 @@ class DocsActivity : AppCompatActivity() {
         val projection = arrayOf(
             MediaStore.Files.FileColumns.DATA,
             MediaStore.Files.FileColumns.DISPLAY_NAME,
-            MediaStore.Files.FileColumns.SIZE
+            MediaStore.Files.FileColumns.SIZE,
+            MediaStore.Files.FileColumns.DATE_ADDED
         )
 
         val selection = "${MediaStore.Files.FileColumns.DATA} LIKE ? " +
@@ -100,7 +101,7 @@ class DocsActivity : AppCompatActivity() {
 
         val uri = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL)
 
-        applicationContext.contentResolver.query(uri, projection,selection,selectionArgs, null)?.use { cursor ->
+        applicationContext.contentResolver.query(uri, projection,selection,selectionArgs,MediaStore.Files.FileColumns.DATE_ADDED+ " DESC")?.use { cursor ->
             val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
             val titleColumn =
                 cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DISPLAY_NAME)

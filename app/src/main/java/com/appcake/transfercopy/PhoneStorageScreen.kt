@@ -69,10 +69,16 @@ class PhoneStorageScreen : AppCompatActivity() {
 
         binding.apply {
             contactsLinearLayout.setOnClickListener {
-                val intent = Intent(this@PhoneStorageScreen,ContactActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                val permission = android.Manifest.permission.READ_CONTACTS
+                if (ContextCompat.checkSelfPermission(this@PhoneStorageScreen, permission) == PackageManager.PERMISSION_GRANTED) {
+                    val intent = Intent(this@PhoneStorageScreen,ContactActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this@PhoneStorageScreen, "Please Grant Contact Permissions Manually to use the App!", Toast.LENGTH_SHORT).show()
+                }
+
             }
             docsLinearLayout.setOnClickListener {
                 val intent = Intent(this@PhoneStorageScreen,DocsActivity::class.java)
@@ -100,10 +106,15 @@ class PhoneStorageScreen : AppCompatActivity() {
             }
 
             calenderLinearLayout.setOnClickListener {
-                val intent = Intent(this@PhoneStorageScreen,CalenderActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                val permission = android.Manifest.permission.READ_CALENDAR
+                if (ContextCompat.checkSelfPermission(this@PhoneStorageScreen, permission) == PackageManager.PERMISSION_GRANTED) {
+                    val intent = Intent(this@PhoneStorageScreen,CalenderActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this@PhoneStorageScreen, "Please Grant Calendar Permissions Manually to use the App!", Toast.LENGTH_SHORT).show()
+                }
             }
             calendarSizeText.text = "0 GB/ $iTotalSpace GB"
             contactSizeText.text = "0 GB/ $iTotalSpace GB"
@@ -205,10 +216,14 @@ class PhoneStorageScreen : AppCompatActivity() {
     private fun docSpace():Long {
         val uri = MediaStore.Files.getContentUri("external")
         val projection = arrayOf(MediaStore.Files.FileColumns.SIZE)
+        val selection = "${MediaStore.Files.FileColumns.DATA} LIKE ? " +
+                "OR ${MediaStore.Files.FileColumns.DATA} LIKE ? " +
+                "OR ${MediaStore.Files.FileColumns.DATA} LIKE ? "
+        val selectionArgs = arrayOf("%${".pdf"}", "%${".docx"}", "%${".doc"}")
 
        // Query the media provider to retrieve the size of all docs
         var totalSize = 0L
-        val cursor = contentResolver.query(uri, projection, null, null, null)
+        val cursor = contentResolver.query(uri, projection,selection,selectionArgs, null)
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 val size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE))
@@ -219,54 +234,7 @@ class PhoneStorageScreen : AppCompatActivity() {
 
         return totalSize
     }
-    private fun requestPermission(){
 
-        isReadPermissionGranted = ContextCompat.checkSelfPermission(
-            this,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-
-        isContactPermissionGranted = ContextCompat.checkSelfPermission(
-            this,
-            android.Manifest.permission.READ_CONTACTS
-        ) == PackageManager.PERMISSION_GRANTED
-
-        isCalendarPermissionGranted = ContextCompat.checkSelfPermission(
-            this,
-            android.Manifest.permission.READ_CALENDAR
-        ) == PackageManager.PERMISSION_GRANTED
-
-        isEXternalStoragePermissionGranted = ContextCompat.checkSelfPermission(
-            this,
-            android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-
-        val permissionRequest : MutableList<String> = ArrayList()
-
-        if (!isReadPermissionGranted){
-
-            permissionRequest.add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-
-        if (!isContactPermissionGranted){
-
-            permissionRequest.add(android.Manifest.permission.READ_CONTACTS)
-        }
-
-        if (!isCalendarPermissionGranted){
-
-            permissionRequest.add(android.Manifest.permission.READ_CALENDAR)
-        }
-        if (!isEXternalStoragePermissionGranted){
-
-            permissionRequest.add(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-        }
-        if (permissionRequest.isNotEmpty()){
-
-            permissionLauncher.launch(permissionRequest.toTypedArray())
-        }
-
-    }
 
 
 }
