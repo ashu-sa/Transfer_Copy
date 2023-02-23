@@ -195,4 +195,13 @@ class PhoneStorageScreen : AppCompatActivity() {
 
         return totalSize
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(Intent(this@PhoneStorageScreen,FileTransferActivity::class.java))
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+
+    }
 }
