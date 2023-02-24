@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Point
+import android.net.NetworkInfo
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.p2p.*
 import android.os.Build
@@ -51,6 +52,7 @@ class FileTransferActivity : AppCompatActivity() {
     private var wifiP2pManager: WifiP2pManager? = null
     private var channel: WifiP2pManager.Channel? = null
     private var connectionInfoListener: WifiP2pManager.ConnectionInfoListener? = null
+    private var deviceAddressforQR = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +62,62 @@ class FileTransferActivity : AppCompatActivity() {
 
         wifiP2pManager = getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
         channel = wifiP2pManager?.initialize(this, mainLooper, null)
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                when (intent.action) {
+                    WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION -> {
+                        // Wi-Fi Direct state changed
+                    }
+                    WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION -> {
+                        wifiP2pManager!!.requestPeers(channel,
+                            WifiP2pManager.PeerListListener { peers ->
+                                // Process the list of available peers
+                            })
+                    }
+                    WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION -> {
+                        // Wi-Fi Direct connection state changed
+                        val networkInfo = intent.getParcelableExtra<NetworkInfo>(WifiP2pManager.EXTRA_NETWORK_INFO)
+                        if (networkInfo!!.isConnected) {
+                            // Connected to a peer
+                            val wifiP2pInfo = intent.getParcelableExtra<WifiP2pInfo>(WifiP2pManager.EXTRA_WIFI_P2P_INFO)
+                            val groupOwnerAddress = wifiP2pInfo?.groupOwnerAddress
+                            // Process the connection
+                        } else {
+                            // Disconnected from a peer
+                        }
+                    }
+                    WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION -> {
+                        // This device's Wi-Fi Direct details changed
+                    }
+                }
+            }
+        }
+        val intentFilter = IntentFilter().apply {
+            addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
+            addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)
+            addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
+            addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
+        }
+
+        registerReceiver(receiver, intentFilter)
+        wifiP2pManager!!.discoverPeers(channel, object : WifiP2pManager.ActionListener {
+            override fun onSuccess() {
+                Toast.makeText(this@FileTransferActivity, "Discovery Started", Toast.LENGTH_SHORT).show()
+            }
+            override fun onFailure(reason: Int) {
+                // Discovery failed
+            }
+        })
+        val peerListListener = WifiP2pManager.PeerListListener { peerList ->
+            // Handle the list of nearby Wi-Fi P2P devices
+            val peers = peerList.deviceList
+            if (peers.isNotEmpty()) {
+                // Get the address of the first nearby Wi-Fi P2P device
+                val deviceAddress = peers.first().deviceAddress
+                deviceAddressforQR = deviceAddress
+            }
+        }
+            wifiP2pManager!!.requestPeers(channel, peerListListener)
 
         val wifimanager: WifiManager =
             getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -114,47 +172,8 @@ class FileTransferActivity : AppCompatActivity() {
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.custom_dialog_qrcode)
         val image = dialog.findViewById<ImageView>(R.id.qr_code)
-        val wifiP2pManager = getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
-        val channel = wifiP2pManager.initialize(this, mainLooper, null)
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                when (intent.action) {
-                    WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION -> {
-                        // Wi-Fi Direct state changed
-                    }
-                    WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION -> {
-                        // List of available peers changed
-                    }
-                    WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION -> {
-                        // Wi-Fi Direct connection state changed
-                    }
-                    WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION -> {
-                        // This device's Wi-Fi Direct details changed
-                    }
-                }
-            }
-        }
-        val intentFilter = IntentFilter().apply {
-            addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
-            addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)
-            addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
-            addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
-        }
 
-        registerReceiver(receiver, intentFilter)
-        wifiP2pManager.discoverPeers(channel, object : WifiP2pManager.ActionListener {
-            override fun onSuccess() {
-                Toast.makeText(this@FileTransferActivity, "Discovery Started", Toast.LENGTH_SHORT).show()
-            }
-            override fun onFailure(reason: Int) {
-                // Discovery failed
-            }
-        })
-        val peerListListener = WifiP2pManager.PeerListListener { peerList ->
-            // Handle the list of nearby Wi-Fi P2P devices
-            val peers = peerList.deviceList
-            // Get the address of the first nearby Wi-Fi P2P device
-            val deviceAddress = peers.firstOrNull()?.deviceAddress
+
             // Generate QR code using the device address
             val windowManager: WindowManager = getSystemService(WINDOW_SERVICE) as WindowManager
             val display: Display = windowManager.defaultDisplay
@@ -164,7 +183,7 @@ class FileTransferActivity : AppCompatActivity() {
             val height = point.y
             var dimen = if (width < height) width else height
             dimen = dimen * 3 / 4
-            val qrEncoder = QRGEncoder(deviceAddress, null, QRGContents.Type.TEXT, dimen)
+            val qrEncoder = QRGEncoder(getMacAddress(this), null, QRGContents.Type.TEXT, dimen)
             try {
                 val bitmap = qrEncoder.getBitmap(0)
                 image.setImageBitmap(bitmap)
@@ -172,8 +191,7 @@ class FileTransferActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
-        wifiP2pManager.requestPeers(channel, peerListListener)
+
         dialog.show()
     }
 
@@ -184,6 +202,7 @@ class FileTransferActivity : AppCompatActivity() {
                 android.Manifest.permission.READ_CONTACTS,
                 android.Manifest.permission.READ_CALENDAR,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
+
             )
             .withListener(object : MultiplePermissionsListener {
 
@@ -240,5 +259,11 @@ class FileTransferActivity : AppCompatActivity() {
         wifiConfiguration.preSharedKey = UUID.randomUUID().toString()
 
         return wifiConfiguration.preSharedKey
+    }
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun getMacAddress(context: Context): String {
+        val wifiManager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val macAddress = wifiManager.connectionInfo.macAddress
+        return macAddress
     }
 }

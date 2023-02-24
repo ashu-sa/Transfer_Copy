@@ -6,7 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.net.NetworkInfo
+import android.net.wifi.WpsInfo
 import android.net.wifi.p2p.WifiP2pConfig
+import android.net.wifi.p2p.WifiP2pDevice
+import android.net.wifi.p2p.WifiP2pInfo
 import android.net.wifi.p2p.WifiP2pManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -39,7 +43,8 @@ class ReceiveActivity : AppCompatActivity() {
     private lateinit var binding: ActivityReceiveBinding
     private var wifiP2pManager: WifiP2pManager? = null
     private var channel: WifiP2pManager.Channel? = null
-    private var connectionInfoListener: WifiP2pManager.ConnectionInfoListener? = null
+    private var peerListListener: WifiP2pManager.PeerListListener? = null
+    private var peerList: MutableList<WifiP2pDevice>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,9 +53,61 @@ class ReceiveActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         validatePermission()
+        wifiP2pManager = getSystemService(WIFI_P2P_SERVICE) as WifiP2pManager
+        channel = wifiP2pManager?.initialize(this, mainLooper, null)
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                when (intent.action) {
+                    WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION -> {
+                        // Wi-Fi Direct state changed
+                    }
+                    WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION -> {
+                        wifiP2pManager!!.requestPeers(channel,
+                            WifiP2pManager.PeerListListener { peers ->
+                                // Process the list of available peers
+                            })
+                    }
+                    WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION -> {
+                        // Wi-Fi Direct connection state changed
+                        val networkInfo = intent.getParcelableExtra<NetworkInfo>(WifiP2pManager.EXTRA_NETWORK_INFO)
+                        if (networkInfo!!.isConnected) {
+                            // Connected to a peer
+                            val wifiP2pInfo = intent.getParcelableExtra<WifiP2pInfo>(WifiP2pManager.EXTRA_WIFI_P2P_INFO)
+                            val groupOwnerAddress = wifiP2pInfo?.groupOwnerAddress
+                            // Process the connection
+                        } else {
+                            // Disconnected from a peer
+                        }
+                    }
+                    WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION -> {
+                        // This device's Wi-Fi Direct details changed
+                    }
+                }
+            }
+        }
+        val intentFilter = IntentFilter().apply {
+            addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION)
+            addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION)
+            addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION)
+            addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION)
+        }
 
-        val manager: WifiP2pManager = getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
-        val channel: WifiP2pManager.Channel = manager.initialize(this, Looper.getMainLooper(), null)
+        registerReceiver(receiver, intentFilter)
+        wifiP2pManager?.discoverPeers(channel, object : WifiP2pManager.ActionListener {
+            override fun onSuccess() {
+                // Successfully initiated peer discovery
+            }
+
+            override fun onFailure(reason: Int) {
+                // Failed to initiate peer discovery
+            }
+        })
+        peerListListener = WifiP2pManager.PeerListListener { peers ->
+            // Update the available peer list
+            peerList = peers.deviceList as MutableList<WifiP2pDevice>?
+        }
+        openQRscanner()
+
 
 
 
@@ -76,16 +133,13 @@ class ReceiveActivity : AppCompatActivity() {
                 }
 
                 override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                    Toast.makeText(this@ReceiveActivity, "Permission 2", Toast.LENGTH_SHORT).show()
-
+                    Toast.makeText(this@ReceiveActivity, "Please grant Permission", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
                     p0: PermissionRequest?,
                     p1: PermissionToken?
                 ) {
-                    Toast.makeText(this@ReceiveActivity, "Permission 3", Toast.LENGTH_SHORT).show()
-
                 }
 
             }).check()
@@ -112,17 +166,7 @@ class ReceiveActivity : AppCompatActivity() {
 
                 if (it != null){
                     val deviceAddress = it.text
-                    val config = WifiP2pConfig()
-                    config.deviceAddress = deviceAddress
-                    wifiP2pManager!!.connect(channel, config, object : WifiP2pManager.ActionListener {
-                        override fun onSuccess() {
-                            Toast.makeText(this@ReceiveActivity, "Connected to $deviceAddress", Toast.LENGTH_SHORT).show()
-                        }
-
-                        override fun onFailure(reason: Int) {
-                            Toast.makeText(this@ReceiveActivity, "Failed to connect to $deviceAddress", Toast.LENGTH_SHORT).show()
-                        }
-                    })
+                    connectToDevice(deviceAddress)
                 }
 
 //                val match = "Hello"
@@ -173,5 +217,25 @@ class ReceiveActivity : AppCompatActivity() {
             }
         }
             codeScanner.startPreview()
+    }
+    fun connectToDevice(deviceAddress: String) {
+        // Find the device with the given MAC address in the peer list
+        val deviceToConnect = peerList?.find { it.deviceAddress == deviceAddress }
+
+        // Create a WifiP2pConfig object with the device's details
+        val config = WifiP2pConfig()
+        config.deviceAddress = deviceToConnect?.deviceAddress
+        config.wps.setup = WpsInfo.PBC
+
+        // Connect to the device
+        wifiP2pManager?.connect(channel, config, object : WifiP2pManager.ActionListener {
+            override fun onSuccess() {
+                Toast.makeText(this@ReceiveActivity, "Connection Successful", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(reason: Int) {
+                Toast.makeText(this@ReceiveActivity, "Connection Failed", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
