@@ -133,8 +133,12 @@ class FileTransferActivity : AppCompatActivity() {
 
             receiveFileCard.setOnClickListener {
                 if (!wifimanager.isWifiEnabled) {
-                    val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
-                    startActivity(intent)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val intent = Intent(Settings.ACTION_WIFI_SETTINGS)
+                        startActivity(intent)
+                    }else{
+                        Toast.makeText(this@FileTransferActivity, "Please turn on WIFI", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 val permission = android.Manifest.permission.READ_EXTERNAL_STORAGE
                 if (ContextCompat.checkSelfPermission(
@@ -142,7 +146,7 @@ class FileTransferActivity : AppCompatActivity() {
                         permission
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    val intent = Intent(this@FileTransferActivity, ReceiveActivity::class.java)
+                    val intent = Intent(this@FileTransferActivity, PhoneStorageScreen ::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)

@@ -13,7 +13,6 @@ class CalenderAdapter(private val list: ArrayList<GoogleCalendar>):Adapter<Calen
     class CalnderViewHolder(itemView: View):ViewHolder(itemView) {
         val textview = itemView.findViewById<TextView>(R.id.time_text)
         val textview2 = itemView.findViewById<TextView>(R.id.event_text)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalnderViewHolder {

@@ -13,11 +13,16 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.appcake.transfercopy.Adapter.CalendarDateAdapter
 import com.appcake.transfercopy.Adapter.CalenderAdapter
 import com.appcake.transfercopy.data.GoogleCalendar
 import com.appcake.transfercopy.databinding.ActivityCalenderBinding
 import com.kizitonwose.calendar.view.ViewContainer
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -25,11 +30,28 @@ import kotlin.collections.ArrayList
 class CalenderActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCalenderBinding
     private lateinit var eventList : ArrayList<GoogleCalendar>
-    @RequiresApi(Build.VERSION_CODES.O)
+    private lateinit var selectedDate : LocalDate
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCalenderBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            selectedDate= LocalDate.now()
+            setMonthView()
+            binding.monthBackButton.setOnClickListener {
+                selectedDate= selectedDate.minusMonths(1)
+                setMonthView()
+            }
+            binding.monthNextButton.setOnClickListener {
+                selectedDate= selectedDate.plusMonths(1)
+                setMonthView()
+            }
+        }
+
+
 
         eventList= getEvents()
         val adapter = CalenderAdapter(eventList)
@@ -37,28 +59,6 @@ class CalenderActivity : AppCompatActivity() {
             eventRcView.layoutManager = LinearLayoutManager(this@CalenderActivity)
             eventRcView.adapter = adapter
         }
-
-//        binding.dateRc.dayBinder = object : MonthDayBinder<DayViewContainer> {
-//            // Called only when a new container is needed.
-//            override fun create(view: View) = DayViewContainer(view)
-//
-//            // Called every time we need to reuse a container.
-//            @SuppressLint("ResourceAsColor")
-//            @RequiresApi(Build.VERSION_CODES.O)
-//            override fun bind(container: DayViewContainer, data: CalendarDay) {
-//                container.textView.text = data.date.dayOfMonth.toString()
-//                if (data.position != DayPosition.MonthDate) {
-//                    container.textView.setTextColor(Color.GRAY)
-//                }
-//            }
-//        }
-//        val currentMonth = YearMonth.now()
-//        val startMonth = currentMonth.minusMonths(100)  // Adjust as needed
-//        val endMonth = currentMonth.plusMonths(100)  // Adjust as needed
-//        val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY) // Available from the library
-//        binding.dateRc.setup(startMonth, endMonth,daysOfWeek.first())
-//        binding.dateRc.scrollToMonth(currentMonth)
-
 
 
         binding.apply {
@@ -76,8 +76,40 @@ class CalenderActivity : AppCompatActivity() {
             }
         }
     }
-    class DayViewContainer(view: View) : ViewContainer(view) {
-        val textView = view.findViewById<TextView>(R.id.date_text) }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setMonthView() {
+       binding.monthOfYear.text = monthYearFromDate(selectedDate)
+        val daysInMonthArray:ArrayList<String> = daysInMonthArray(selectedDate)
+        val adapter = CalendarDateAdapter(daysInMonthArray)
+        binding.calendarDateRcview.layoutManager = GridLayoutManager(this,7)
+        binding.calendarDateRcview.adapter = adapter
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun daysInMonthArray(date: LocalDate): ArrayList<String> {
+      val daysInMonthArray:ArrayList<String> = ArrayList()
+        val yearMonth = YearMonth.from(date)
+        var daysInMonth = yearMonth.lengthOfMonth()
+        val firstOfMonth = selectedDate.withDayOfMonth(1)
+        var daysOfWeek = firstOfMonth.dayOfWeek.value
+
+        for (i in 2..42){
+            if (i <= daysOfWeek || i> daysInMonth+daysOfWeek){
+                daysInMonthArray.add("")
+            }else{
+                daysInMonthArray.add((i-daysOfWeek).toString())
+            }
+        }
+        return daysInMonthArray
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun monthYearFromDate(date: LocalDate):String{
+         val formatter = DateTimeFormatter.ofPattern("MMMM yyyy")
+        return date.format(formatter)
+    }
+
 
     @SuppressLint("Range", "SuspiciousIndentation")
     fun getEvents():ArrayList<GoogleCalendar>{
