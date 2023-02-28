@@ -5,17 +5,20 @@ import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.appcake.transfercopy.Adapter.PhotoAdapter
 import com.appcake.transfercopy.databinding.ActivityPhotoBinding
 
-class PhotoActivity : AppCompatActivity() {
+class PhotoActivity : AppCompatActivity(),PhotoAdapter.RecyclerViewClickListener {
     private lateinit var binding: ActivityPhotoBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val adapter = PhotoAdapter(getPhotos())
+        val adapter = PhotoAdapter(getPhotos(),this@PhotoActivity)
         binding.apply {
             photoRcView.layoutManager =GridLayoutManager(this@PhotoActivity,4
             )
@@ -35,7 +38,6 @@ class PhotoActivity : AppCompatActivity() {
             MediaStore.Images.Media.DATA,
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DATE_ADDED
-
         )
         val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val imagecursor: Cursor = this@PhotoActivity.contentResolver.query(uri, columns, null, null,  MediaStore.Images.Media.DATE_ADDED + " DESC")!!
@@ -46,7 +48,10 @@ class PhotoActivity : AppCompatActivity() {
             imageList.add(imagecursor.getString(dataColumnIndex))
         }
         return imageList
+    }
 
+    override fun onClick(position: Int, photo: ImageView) {
+        Toast.makeText(this@PhotoActivity, "Clicked", Toast.LENGTH_SHORT).show()
     }
 
 

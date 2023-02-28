@@ -8,18 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appcake.transfercopy.R
 import com.appcake.transfercopy.data.GoogleCalendar
 
-class CalendarDateAdapter(private val list: ArrayList<String>, val listener: RecyclerViewClickListener): RecyclerView.Adapter<CalendarDateAdapter.CalendarDateViewHolder>() {
+class CalendarDateAdapter(private val list: ArrayList<String>,private var listener:RecyclerViewClickListener): RecyclerView.Adapter<CalendarDateAdapter.CalendarDateViewHolder>() {
     interface RecyclerViewClickListener {
-        fun onClick(position: Int)
+        fun onClick(position: Int,dateText:TextView)
     }
-    class CalendarDateViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+   inner class CalendarDateViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val textview = itemView.findViewById<TextView>(R.id.date_text)
-        init {
-            itemView.setOnClickListener {
-                val position = adapterPosition
-            }
-
+       init {
+        itemView.setOnClickListener {
+            listener?.onClick(adapterPosition,textview)
         }
+    }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarDateViewHolder {

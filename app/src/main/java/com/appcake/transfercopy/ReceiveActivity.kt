@@ -105,12 +105,9 @@ class ReceiveActivity : AppCompatActivity() {
         peerListListener = WifiP2pManager.PeerListListener { peers ->
             // Update the available peer list
             peerList = peers.deviceList as MutableList<WifiP2pDevice>?
+            val l = (peers.deviceList as MutableList<WifiP2pDevice>?)?.get(1)
         }
         openQRscanner()
-
-
-
-
 //        openQRscanner()
         binding.apply {
             backImg.setOnClickListener {

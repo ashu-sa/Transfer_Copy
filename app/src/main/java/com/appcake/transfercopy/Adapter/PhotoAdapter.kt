@@ -11,9 +11,17 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.appcake.transfercopy.R
 import com.bumptech.glide.Glide
 
-class PhotoAdapter(var list:ArrayList<String>):Adapter<PhotoAdapter.PhotoViewHolder>() {
-    class PhotoViewHolder(itemView: View):ViewHolder(itemView) {
+class PhotoAdapter(var list:ArrayList<String>,private var listener:RecyclerViewClickListener):Adapter<PhotoAdapter.PhotoViewHolder>() {
+    interface RecyclerViewClickListener {
+        fun onClick(position: Int,photo:ImageView)
+    }
+   inner class PhotoViewHolder(itemView: View):ViewHolder(itemView) {
       val photoView = itemView.findViewById<ImageView>(R.id.photo_view)
+       init {
+           itemView.setOnClickListener {
+               listener?.onClick(adapterPosition, photoView)
+           }
+       }
 
     }
 
@@ -29,9 +37,5 @@ class PhotoAdapter(var list:ArrayList<String>):Adapter<PhotoAdapter.PhotoViewHol
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         var currentPosition = list[position]
         Glide.with(holder.itemView.context).load(list.get(position)).into(holder.photoView)
-        holder.itemView.setOnClickListener {
-            val overlayDrawable = ContextCompat.getDrawable(holder.itemView.context, R.drawable.selected_item_bg)!!
-            holder.photoView.overlay.add(overlayDrawable)
-        }
     }
 }
