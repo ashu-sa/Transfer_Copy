@@ -1,4 +1,3 @@
-# Transfer And Copy
 # File Sharing App
 
 ## Overview
