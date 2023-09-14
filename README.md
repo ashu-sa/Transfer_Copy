@@ -15,7 +15,7 @@ The File Sharing App is a versatile and user-friendly Android application that a
 ## Screenshots
 
 ### Home Screen
-![Home Screen](screenshots/home_screen.png)
+![Home Screen]("C:\Users\crics\OneDrive\Pictures\Screenshots\f1.jpg")
 
 ### File Sharing
 ![File Sharing](screenshots/file_sharing.png)
@@ -52,4 +52,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 - We would like to express our gratitude to the open-source community and the developers of Wi-Fi Direct and QR code scanning libraries for making this project possible.
 
-Feel free to reach out to us with any questions or feedback at [your-email@example.com](mailto:your-email@example.com).
+Feel free to reach out to us with any questions or feedback at [your-email@example.com](mailto:sahooashutosh222@gmail.com).
