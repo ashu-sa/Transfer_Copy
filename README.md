@@ -14,29 +14,40 @@ The File Sharing App is a versatile and user-friendly Android application that a
 
 ## Screenshots
 
-### Home Screen
-![Home Screen](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/fafc6a49-1e3f-4e9b-8719-f8ca05a6bafe)
+<table>
+  <tr>
+    <td>
+       <h3 align="center">Home Screen</h3>
+      <img src="https://github.com/ashu-sa/Transfer_Copy/assets/90321829/fafc6a49-1e3f-4e9b-8719-f8ca05a6bafe" alt="Home Screen" width="250">
+    </td>
+    <td>
+       <h3 align="center">File Sharing</h3>
+      <img src="https://github.com/ashu-sa/Transfer_Copy/assets/90321829/d1972f29-47f5-42e4-9da7-a6cd552c3142" alt="File Sharing" width="250">
+    </td>
+    <td>
+       <h3 align="center">QR Code Scanner</h3>
+      <img src="https://github.com/ashu-sa/Transfer_Copy/assets/90321829/ad134d04-e967-44f9-97a7-85c2e8316e2c" alt="QR Code Scanner" width="250">
+    </td>
+  </tr>
+  <tr>
+   <td>
+      <h3 align="center">Storage</h3>
+      <img src="https://github.com/ashu-sa/Transfer_Copy/assets/90321829/b363e9c2-bde7-4113-a518-5a94dad99925" alt="Storage" width="250">
+    </td>
+    <td>
+       <h3 align="center">Document</h3>
+      <img src="https://github.com/ashu-sa/Transfer_Copy/assets/90321829/2b413cc2-c6a8-4a8d-a398-0e0409cea910" alt="Document" width="250">
+    </td>
+    <td>
+        <h3 align="center">Setting</h3>
+      <img src="https://github.com/ashu-sa/Transfer_Copy/assets/90321829/f1664eb8-e3a7-461c-9890-0804a35f5958" alt="Setting" width="250">
+    </td>
+  </tr>
+</table>
 
-### File Sharing
-![File Sharing](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/d1972f29-47f5-42e4-9da7-a6cd552c3142)
 
-### QR Code Scanner
-![QR Code Scanner](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/ad134d04-e967-44f9-97a7-85c2e8316e2c)
 
-### Storage
-![Storage](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/b363e9c2-bde7-4113-a518-5a94dad99925)
 
-### Contact
-![Contact](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/99a74748-90cc-4e65-a9a9-a4f28f0963a1)
-
-### Document
-![Document](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/2b413cc2-c6a8-4a8d-a398-0e0409cea910)
-
-### Calender
-![Calender](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/f0c8f83f-8bd9-41c0-8b31-9d9adcd9d920)
-
-### Setting 
-![Setting](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/f1664eb8-e3a7-461c-9890-0804a35f5958)
 
 
 
@@ -70,6 +81,6 @@ We welcome contributions to enhance the functionality and usability of this app.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
-- We would like to express our gratitude to the open-source community and the developers of Wi-Fi Direct and QR code scanning libraries for making this project possible.
+- I would like to express our gratitude to the open-source community and the developers of Wi-Fi Direct and QR code scanning libraries for making this project possible.
 
-Feel free to reach out to us with any questions or feedback at [your-email@example.com](mailto:sahooashutosh222@gmail.com).
+Feel free to reach out to me with any questions or feedback at [sahooashutosh222@gmail.com](mailto:sahooashutosh222@gmail.com).
