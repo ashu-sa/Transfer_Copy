@@ -15,14 +15,33 @@ The File Sharing App is a versatile and user-friendly Android application that a
 ## Screenshots
 
 ### Home Screen
-![Home Screen]("C:\Users\crics\OneDrive\Pictures\Screenshots\f1.jpg")![f1](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/fafc6a49-1e3f-4e9b-8719-f8ca05a6bafe)
-
+![Home Screen](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/fafc6a49-1e3f-4e9b-8719-f8ca05a6bafe)
 
 ### File Sharing
-![File Sharing](screenshots/file_sharing.png)
+![File Sharing](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/d1972f29-47f5-42e4-9da7-a6cd552c3142)
 
 ### QR Code Scanner
-![QR Code Scanner](screenshots/qr_scanner.png)
+![QR Code Scanner](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/ad134d04-e967-44f9-97a7-85c2e8316e2c)
+
+### Storage
+![Storage](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/b363e9c2-bde7-4113-a518-5a94dad99925)
+
+### Contact
+![Contact](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/99a74748-90cc-4e65-a9a9-a4f28f0963a1)
+
+### Document
+![Document](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/2b413cc2-c6a8-4a8d-a398-0e0409cea910)
+
+### Calender
+![Calender](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/f0c8f83f-8bd9-41c0-8b31-9d9adcd9d920)
+
+### Setting 
+![Setting](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/f1664eb8-e3a7-461c-9890-0804a35f5958)
+
+
+
+
+
 
 ## Getting Started
 
