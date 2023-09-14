@@ -15,7 +15,8 @@ The File Sharing App is a versatile and user-friendly Android application that a
 ## Screenshots
 
 ### Home Screen
-![Home Screen]("C:\Users\crics\OneDrive\Pictures\Screenshots\f1.jpg")
+![Home Screen]("C:\Users\crics\OneDrive\Pictures\Screenshots\f1.jpg")![f1](https://github.com/ashu-sa/Transfer_Copy/assets/90321829/fafc6a49-1e3f-4e9b-8719-f8ca05a6bafe)
+
 
 ### File Sharing
 ![File Sharing](screenshots/file_sharing.png)
