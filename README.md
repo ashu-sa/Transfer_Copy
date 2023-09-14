@@ -12,6 +12,17 @@ The File Sharing App is a versatile and user-friendly Android application that a
 
 - **MVVM Architecture:** The app follows the Model-View-ViewModel (MVVM) architectural pattern, ensuring a clean and maintainable codebase by separating business logic from UI components.
 
+## Screenshots
+
+### Home Screen
+![Home Screen](screenshots/home_screen.png)
+
+### File Sharing
+![File Sharing](screenshots/file_sharing.png)
+
+### QR Code Scanner
+![QR Code Scanner](screenshots/qr_scanner.png)
+
 ## Getting Started
 
 ### Prerequisites
