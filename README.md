@@ -83,3 +83,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - I would like to express our gratitude to the open-source community and the developers of Wi-Fi Direct and QR code scanning libraries for making this project possible.
 
 Feel free to reach out to me with any questions or feedback at [sahooashutosh222@gmail.com](mailto:sahooashutosh222@gmail.com).
+
+Thankyou
