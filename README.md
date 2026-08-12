@@ -1,7 +1,7 @@
-# File Sharing App
+# Droplyy
 
 ## Overview
-The File Sharing App is a versatile and user-friendly Android application that allows users to seamlessly share files between devices using Wi-Fi Direct (Wifip2p). It simplifies the file-sharing process with the added convenience of QR code scanning for device pairing. Built on the MVVM architecture, this app provides a robust and organized codebase.
+Droplyy is a versatile and user-friendly Android application that allows users to seamlessly share files between devices using Wi-Fi Direct (Wifip2p). It simplifies the file-sharing process with the added convenience of QR code scanning for device pairing. Built on the MVVM architecture, this app provides a robust and organized codebase.
 
 ## Features
 
@@ -44,15 +44,6 @@ The File Sharing App is a versatile and user-friendly Android application that a
   </tr>
 </table>
 
-
-
-
-
-
-
-
-
-
 ## Getting Started
 
 ### Prerequisites
@@ -66,7 +57,7 @@ The File Sharing App is a versatile and user-friendly Android application that a
 
 ## Usage
 
-1. Launch the File Sharing App on both sender and receiver devices.
+1. Launch Droplyy on both sender and receiver devices.
 2. On the sender device, select the file you want to share.
 3. Tap the "Share" button and choose the option to share via Wi-Fi Direct.
 4. On the receiver device, tap "Scan QR Code" to open the QR code scanner.

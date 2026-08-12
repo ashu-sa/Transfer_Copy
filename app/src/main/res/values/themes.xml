@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.TransferCopy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Droplyy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/white</item>
@@ -15,14 +15,14 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.TransferCopy.NoActionBar">
+    <style name="Theme.Droplyy.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.TransferCopy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Droplyy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.TransferCopy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Droplyy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
         <item name="android:textSize">@dimen/_12ssp</item>

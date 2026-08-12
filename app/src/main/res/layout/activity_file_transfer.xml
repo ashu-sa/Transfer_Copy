@@ -36,7 +36,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/notosans_semibold"
             android:gravity="center"
-            android:text="File Transfer"
+            android:text="@string/droply_header"
             android:textColor="@color/white"
             android:textSize="@dimen/_14ssp" />
 
@@ -68,7 +68,7 @@
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/notosans_medium"
-                android:text="Send Files"
+                android:text="@string/send_files"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_18ssp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +115,7 @@
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/notosans_medium"
-                android:text="Receive Files"
+                android:text="@string/receive_files"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_18ssp"
                 app:layout_constraintStart_toStartOf="parent"
