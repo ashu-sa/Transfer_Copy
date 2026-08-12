@@ -13,5 +13,5 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "Transfer & Copy"
+rootProject.name = "Droplyy"
 include ':app'

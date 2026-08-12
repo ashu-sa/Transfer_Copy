@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Transfer &amp; Copy</string>
+    <string name="app_name">Droplyy</string>
     <string name="second_text_name">Transfer videos, photos , contacts and data
 seamlessly from old to new phone.</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -13,7 +13,9 @@ seamlessly from old to new phone.</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="qr_code">qr_code</string>
+    <string name="droply_header">Droplyy</string>
+    <string name="send_files">Send Files</string>
+    <string name="receive_files">Receive Files</string>
     <string name="enter_your_info">Enter your info</string>
     <string name="generate_qr_code">Generate QR Code</string>
 </resources>

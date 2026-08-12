@@ -19,8 +19,13 @@
         android:name="android.permission.NEARBY_WIFI_DEVICES"
         android:usesPermissionFlags="neverForLocation" />
     <uses-permission
-        android:name="android.permission.ACCESS_FINE_LOCATION"
-        android:maxSdkVersion="32" />
+        android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -34,7 +39,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TransferCopy"
+        android:theme="@style/Theme.Droplyy"
         tools:targetApi="31">
         <activity
             android:name=".AllEventsActivity"
@@ -61,7 +66,7 @@
             android:name=".ReceiveActivity"
             android:exported="false"
             android:label="@string/title_activity_receive"
-            android:theme="@style/Theme.TransferCopy.NoActionBar" />
+            android:theme="@style/Theme.Droplyy.NoActionBar" />
         <activity
             android:name=".FileTransferActivity"
             android:exported="false" />

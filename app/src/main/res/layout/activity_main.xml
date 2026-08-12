@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/notosans_semibold"
             android:gravity="center"
-            android:text="File Transfer"
+            android:text="@string/droply_header"
             android:layout_marginEnd="@dimen/_28sdp"
             android:textColor="@color/white"
             android:textSize="@dimen/_14ssp" />
